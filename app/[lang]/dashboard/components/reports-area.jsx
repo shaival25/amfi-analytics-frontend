@@ -80,6 +80,7 @@ const ReportsArea = ({ selectedBuses }) => {
   const [mascotRank, setMascotRank] = useState({})
   const [totalCricketerCount, setTotalCricketerCount] = useState(0)
   const [personCounter, setPersonCounter] = useState(0)
+  const [feedbackCounter, setFeedbackCounter] = useState(0)
   const router = useRouter()
   const fetchFullCount = async () => {
     try {
@@ -138,17 +139,36 @@ const ReportsArea = ({ selectedBuses }) => {
       handleError(error, router)
     }
   }
+
+  const fetchFeedBackCount = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/feedback-count`,
+        { selectedBuses },
+        {
+          headers: {
+            'x-auth-token': Cookies.get('authToken')
+          }
+        }
+      )
+      if (response.status === 200) {
+        setFeedbackCounter(response.data)
+      }
+    } catch (error) {
+      handleError(error, router)
+    }
+  }
   useEffect(() => {
     fetchFullCount()
     fetchMascotRank()
     fetchPersonCounter()
-
-    console.log(selectedBuses)
+    fetchFeedBackCount()
 
     const interval = setInterval(() => {
       fetchFullCount()
       fetchMascotRank()
       fetchPersonCounter()
+      fetchFeedBackCount()
     }, 10000)
 
     return () => clearInterval(interval)
@@ -174,23 +194,7 @@ const ReportsArea = ({ selectedBuses }) => {
           </div>
         </CardContent>
       </Card>
-      <Card className='mb-4'>
-        <CardHeader className='flex-col-reverse sm:flex-row flex-wrap gap-2 border-none mb-0 pb-0'>
-          <span className='text-sm font-medium text-default-900 flex-1'>
-            Cricketer Preference
-          </span>
-          <span
-            className={cn(
-              'flex-none h-9 w-9 flex justify-center items-center bg-default-100 rounded-full'
-            )}
-          >
-            <Session className='h-4 w-4' />
-          </span>
-        </CardHeader>
-        <CardContent className='px-4'>
-          <CricketerPreference mascotRank={mascotRank} />
-        </CardContent>
-      </Card>
+
       <Card className='mb-4'>
         <CardHeader className='flex-col-reverse sm:flex-row flex-wrap gap-2  border-none mb-0 pb-0'>
           <span className='text-sm font-medium text-default-900 flex-1'>
@@ -208,6 +212,42 @@ const ReportsArea = ({ selectedBuses }) => {
           <div className='text-2xl font-semibold text-default-900 mb-2.5'>
             {personCounter}
           </div>
+        </CardContent>
+      </Card>
+      <Card className='mb-4'>
+        <CardHeader className='flex-col-reverse sm:flex-row flex-wrap gap-2  border-none mb-0 pb-0'>
+          <span className='text-sm font-medium text-default-900 flex-1'>
+            Total Feedback Count
+          </span>
+          <span
+            className={cn(
+              'flex-none h-9 w-9 flex justify-center items-center bg-default-100 rounded-full'
+            )}
+          >
+            <Eye className='h-4 w-4' />
+          </span>
+        </CardHeader>
+        <CardContent className='pb-4 px-4'>
+          <div className='text-2xl font-semibold text-default-900 mb-2.5'>
+            {feedbackCounter}
+          </div>
+        </CardContent>
+      </Card>
+      <Card className='mb-4'>
+        <CardHeader className='flex-col-reverse sm:flex-row flex-wrap gap-2 border-none mb-0 pb-0'>
+          <span className='text-sm font-medium text-default-900 flex-1'>
+            Cricketer Preference
+          </span>
+          <span
+            className={cn(
+              'flex-none h-9 w-9 flex justify-center items-center bg-default-100 rounded-full'
+            )}
+          >
+            <Session className='h-4 w-4' />
+          </span>
+        </CardHeader>
+        <CardContent className='px-4'>
+          <CricketerPreference mascotRank={mascotRank} />
         </CardContent>
       </Card>
     </>

@@ -46,7 +46,7 @@ const ReportsSnapshot = ({ selectedBuses }) => {
     fetchLiveCountUsingRange(range)
 
     return () => clearInterval(interval)
-  }, [range])
+  }, [range, selectedBuses])
 
   const { theme: config, setTheme: setConfig } = useThemeStore()
   const { theme: mode } = useTheme()

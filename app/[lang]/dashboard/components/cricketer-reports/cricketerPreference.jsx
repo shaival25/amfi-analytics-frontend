@@ -23,7 +23,7 @@ const CricketerPreference = ({ height = 250, mascotRank }) => {
     },
     labels: [],
     dataLabels: {
-      enabled: false
+      enabled: true
     },
     tooltip: {
       theme: mode === 'dark' ? 'dark' : 'light'
@@ -33,6 +33,7 @@ const CricketerPreference = ({ height = 250, mascotRank }) => {
     },
     plotOptions: {
       pie: {
+        expanOnClick: true,
         donut: {
           labels: {
             show: true,
