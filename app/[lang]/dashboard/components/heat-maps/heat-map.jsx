@@ -35,16 +35,18 @@ const HeatMap = ({ selectedBuses }) => {
     return () => clearInterval(interval)
   }, [selectedBuses])
   return (
-    <>
+    <div className='grid grid-cols-4 gap-2 mt-4'>
       {heatMaps?.map(heatMap => (
-        <div key={heatMap.busName} className='flex flex-col gap-2 mt-4'>
+        <div key={heatMap.busName} className='grid gap-2'>
           <Label>{heatMap.busName}</Label>
-          <img width={200} height={200} src={heatMap.image} alt='heatMap' />
-          <span>Date: {heatMap.date}</span>
-          <span>Time: {heatMap.time}</span>
+          <img width={300} height={300} src={heatMap.image} alt='heatMap' />
+          <div className='fs-6 text-gray-600'>
+            <span>Date: {heatMap.date}</span>
+            <span>Time: {heatMap.time}</span>
+          </div>
         </div>
       ))}
-    </>
+    </div>
   )
 }
 export default HeatMap
