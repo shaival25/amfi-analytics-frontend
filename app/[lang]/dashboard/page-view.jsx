@@ -1,52 +1,167 @@
-'use client'
-import ReportsSnapshot from './components/reports-snapshot'
-import ReportsArea from './components/reports-area'
-import BusSelect from './components/bus-select'
-import HeatMapArea from './components/heat-maps/heat-map'
+"use client";
+import ReportsSnapshot from "./components/reports-snapshot";
+import ReportsArea from "./components/reports-area";
+import BusSelect from "./components/bus-select";
+import HeatMapArea from "./components/heat-maps/heat-map";
 import UserInteractions from './components/user-interactions/user-interactions'
-import { useState } from 'react'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { useState, useRef, useEffect } from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useReactToPrint } from "react-to-print";
+import { Button } from "@/components/ui/button";
+import axios from "axios";
+import Cookies from "js-cookie";
+import handleError from "@/validation/unauthorized";
+import { useRouter } from "next/navigation";
+import { MFLogo } from "@/components/svg";
+import { BeatLoader } from "react-spinners";
 
 const DashboardPageView = ({ trans }) => {
-  const [selectedBuses, setSelectedBuses] = useState(['all']) // 'all' is selected by default
+  const [selectedBuses, setSelectedBuses] = useState(["all"]);
+  const dashboardRef = useRef();
+  const [showPrintLogo, setShowPrintLogo] = useState(false);
+  const [backgroundBlur, setBackgroundBlur] = useState(false);
+  const [buses, setBuses] = useState([]);
+  const router = useRouter();
+
+  const fetchAllBuses = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/bus`,
+        {
+          headers: {
+            "x-auth-token": Cookies.get("authToken"),
+          },
+        }
+      );
+      if (response.status === 200) {
+        setBuses(response.data);
+      }
+    } catch (error) {
+      handleError(error, router);
+    }
+  };
+  useEffect(() => {
+    fetchAllBuses();
+  }, []);
+
+  const getSelectedBusNames = () => {
+    if (selectedBuses.includes("all")) return ["All Buses"];
+
+    return buses
+      .filter((bus) => selectedBuses.includes(bus.macAddress))
+      .map((bus) => bus.busName);
+  };
+
+  const handlePrint = useReactToPrint({
+    content: () => dashboardRef.current,
+    documentTitle: `Dashboard Report - ${getSelectedBusNames().join(", ")}`,
+    copyStyles: true,
+    pageStyle: ``,
+    onBeforePrint: () => {
+      setShowPrintLogo(false);
+    },
+    onAfterPrint: () => {
+      setShowPrintLogo(false), setBackgroundBlur(false);
+    },
+  });
+
+  const displayLogo = () => {
+    setBackgroundBlur(true);
+
+    setTimeout(() => {
+      setShowPrintLogo(true);
+    }, 100);
+    setTimeout(() => {
+      handlePrint();
+    }, 1001);
+  };
 
   return (
-    <div className='space-y-6'>
-      <div className='flex items-center flex-wrap justify-between gap-4'>
-        <div className='text-2xl font-medium text-default-800 '>
-          Analytics {trans?.dashboard}
+    <div style={{ position: "relative" }}>
+      <div className="space-y-6" ref={dashboardRef}>
+        {showPrintLogo && (
+          <div
+            className="print-logo"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <MFLogo height="100px" width="500px" />
+          </div>
+        )}
+        <div className="flex items-center flex-wrap justify-between gap-4">
+          <div className="text-2xl font-medium text-default-800 ">
+            Analytics {trans?.dashboard}
+          </div>
+          {!showPrintLogo && (
+            <Button
+              onClick={displayLogo}
+              className="btn btn-primary"
+              style={{ backgroundColor: "#35C2DB", marginTop: "20px" }}
+            >
+              Export to PDF
+            </Button>
+          )}
         </div>
-      </div>
-      <BusSelect
-        selectedBuses={selectedBuses}
-        setSelectedBuses={setSelectedBuses}
-      />
+        {!showPrintLogo && (
+          <BusSelect
+            selectedBuses={selectedBuses}
+            setSelectedBuses={setSelectedBuses}
+            buses={buses}
+          />
+        )}
 
-      {/* reports area */}
-      <div className='grid grid-cols-1  gap-2 '>
-        <div className='col-span-1 lg:col-span-1'>
-          <ReportsSnapshot selectedBuses={selectedBuses} />
+        {/* reports area */}
+        <div className="grid grid-cols-1  gap-2 ">
+          <div className="col-span-1 lg:col-span-1">
+            <ReportsSnapshot selectedBuses={selectedBuses} />
+          </div>
         </div>
-      </div>
-      <div className='grid grid-cols-3  gap-2 '>
-        <ReportsArea selectedBuses={selectedBuses} />
-        <div className='col-span-2 lg:col-span-2'>
+        <div className="grid grid-cols-3  gap-2 ">
+          <ReportsArea selectedBuses={selectedBuses} />
+          <div className='col-span-2 lg:col-span-2'>
           <UserInteractions selectedBuses={selectedBuses} />
         </div>
       </div>
-      <Card>
-        <CardHeader className='flex-col-reverse sm:flex-row flex-wrap gap-2  border-none mb-0 pb-0'>
-          Heat Maps
-        </CardHeader>
-        <CardContent className=' mb-2'>
-          <HeatMapArea
-            className='grid grid-cols-4 gap-2 mt-2'
-            selectedBuses={selectedBuses}
-          />
-        </CardContent>
-      </Card>
+        <Card>
+          <CardHeader className="flex-col-reverse sm:flex-row flex-wrap gap-2  border-none mb-0 pb-0">
+            Heat Maps
+          </CardHeader>
+          <CardContent className=" mb-2">
+            <HeatMapArea
+              className="grid grid-cols-4 gap-2 mt-2"
+              selectedBuses={selectedBuses}
+            />
+          </CardContent>
+        </Card>
+      </div>
+      {backgroundBlur && (
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+            backdropFilter: "blur(50px)",
+            position: "absolute",
+            top: "0",
+            left: "0",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            paddingTop: "25%",
+            fontWeight: "bold",
+            fontSize: "24px",
+            gap: "20px",
+          }}
+        >
+          Hang on we are preparing your data
+          <BeatLoader color="#16A34A" />
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default DashboardPageView
+export default DashboardPageView;

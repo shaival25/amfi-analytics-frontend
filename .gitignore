@@ -134,3 +134,7 @@ uploads/
 
 #info.json
 info.json
+
+
+#package-lock
+package-lock.json
