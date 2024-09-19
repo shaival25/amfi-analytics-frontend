@@ -3,6 +3,7 @@ import ReportsSnapshot from "./components/reports-snapshot";
 import ReportsArea from "./components/reports-area";
 import BusSelect from "./components/bus-select";
 import HeatMapArea from "./components/heat-maps/heat-map";
+import UserInteractions from './components/user-interactions/user-interactions'
 import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useReactToPrint } from "react-to-print";
@@ -121,7 +122,10 @@ const DashboardPageView = ({ trans }) => {
         </div>
         <div className="grid grid-cols-3  gap-2 ">
           <ReportsArea selectedBuses={selectedBuses} />
+          <div className='col-span-2 lg:col-span-2'>
+          <UserInteractions selectedBuses={selectedBuses} />
         </div>
+      </div>
         <Card>
           <CardHeader className="flex-col-reverse sm:flex-row flex-wrap gap-2  border-none mb-0 pb-0">
             Heat Maps

@@ -27,6 +27,12 @@ const HeatMap = ({ selectedBuses }) => {
   }
   useEffect(() => {
     fetchHeatMaps()
+
+    const interval = setInterval(() => {
+      fetchHeatMaps()
+    }, 10000)
+
+    return () => clearInterval(interval)
   }, [selectedBuses])
   return (
     <>
