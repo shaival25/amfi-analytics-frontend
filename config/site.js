@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "DashTail Next js Admin Template",
+  name: "Bharat Nivesh Yatra Admin",
   description: null,
   theme: "green",
   layout: "vertical",
