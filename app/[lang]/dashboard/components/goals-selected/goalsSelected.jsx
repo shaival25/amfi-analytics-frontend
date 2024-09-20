@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
-const CricketerPreference = ({ height = 250, mascotRank }) => {
+const CricketerPreference = ({ height = 250, goalsSelected }) => {
   const { theme: config, isRtl } = useThemeStore()
   const { theme: mode } = useTheme()
   const theme = themes.find(theme => theme.name === config)
@@ -102,11 +102,11 @@ const CricketerPreference = ({ height = 250, mascotRank }) => {
   })
 
   useEffect(() => {
-    if (mascotRank) {
-      const updatedSeries = Object.keys(mascotRank).map(
-        mascot => mascotRank[mascot]
+    if (goalsSelected) {
+      const updatedSeries = Object.keys(goalsSelected).map(
+        goal => goalsSelected[goal]
       )
-      const updatedLabels = Object.keys(mascotRank)
+      const updatedLabels = Object.keys(goalsSelected)
 
       setSeries(updatedSeries)
       setOptions(prevOptions => ({
@@ -114,7 +114,7 @@ const CricketerPreference = ({ height = 250, mascotRank }) => {
         labels: updatedLabels
       }))
     }
-  }, [mascotRank])
+  }, [goalsSelected])
 
   return (
     <Chart

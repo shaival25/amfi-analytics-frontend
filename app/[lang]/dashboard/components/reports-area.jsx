@@ -1,15 +1,14 @@
 'use client'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { Icon } from '@iconify/react'
 import { Cup, Eye, Increase, Session } from '@/components/svg'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
 import handleError from '@/validation/unauthorized'
-import { Separator } from '@/components/ui/separator'
 import CricketerPreference from './cricketer-reports/cricketerPreference'
+import GoalsSelected from './goals-selected/goalsSelected'
 const ReportsArea = ({ selectedBuses }) => {
   const reports = [
     {
@@ -81,6 +80,7 @@ const ReportsArea = ({ selectedBuses }) => {
   const [totalCricketerCount, setTotalCricketerCount] = useState(0)
   const [personCounter, setPersonCounter] = useState(0)
   const [feedbackCounter, setFeedbackCounter] = useState(0)
+  const [goalsSelected, setGoalsSelected] = useState({})
   const router = useRouter()
   const fetchFullCount = async () => {
     try {
@@ -158,17 +158,38 @@ const ReportsArea = ({ selectedBuses }) => {
       handleError(error, router)
     }
   }
+  const fetchGoalsSelected = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/goals-selected`,
+        { selectedBuses },
+        {
+          headers: {
+            'x-auth-token': Cookies.get('authToken')
+          }
+        }
+      )
+      if (response.status === 200) {
+        setGoalsSelected(response.data.goals)
+      }
+    } catch (error) {
+      handleError(error, router)
+    }
+  }
+
   useEffect(() => {
     fetchFullCount()
     fetchMascotRank()
     fetchPersonCounter()
     fetchFeedBackCount()
+    fetchGoalsSelected()
 
     const interval = setInterval(() => {
       fetchFullCount()
       fetchMascotRank()
       fetchPersonCounter()
       fetchFeedBackCount()
+      fetchGoalsSelected()
     }, 10000)
 
     return () => clearInterval(interval)
@@ -233,7 +254,7 @@ const ReportsArea = ({ selectedBuses }) => {
           </div>
         </CardContent>
       </Card>
-      <Card className='mb-4 h-full'>
+      <Card className='mb-4'>
         <CardHeader className='flex-col-reverse sm:flex-row flex-wrap gap-2 border-none mb-0 pb-0'>
           <span className='text-sm font-medium text-default-900 flex-1'>
             Cricketer Preference
@@ -248,6 +269,23 @@ const ReportsArea = ({ selectedBuses }) => {
         </CardHeader>
         <CardContent className='px-4'>
           <CricketerPreference mascotRank={mascotRank} />
+        </CardContent>
+      </Card>
+      <Card className='mb-4'>
+        <CardHeader className='flex-col-reverse sm:flex-row flex-wrap gap-2 border-none mb-0 pb-0'>
+          <span className='text-sm font-medium text-default-900 flex-1'>
+            Goals Selected
+          </span>
+          <span
+            className={cn(
+              'flex-none h-9 w-9 flex justify-center items-center bg-default-100 rounded-full'
+            )}
+          >
+            <Session className='h-4 w-4' />
+          </span>
+        </CardHeader>
+        <CardContent className='px-4'>
+          <GoalsSelected goalsSelected={goalsSelected} />
         </CardContent>
       </Card>
     </>
