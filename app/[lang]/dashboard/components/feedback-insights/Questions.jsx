@@ -26,7 +26,6 @@ const QuestionBar = ({ height = 350, barData, index }) => {
     labels: barData?.labels,
     datasets: barData.datasets
       ? barData.datasets.map(barData => {
-          console.log(barData)
           return {
             ...barData, // Spread existing properties
             fill: false,
@@ -39,10 +38,6 @@ const QuestionBar = ({ height = 350, barData, index }) => {
         })
       : []
   }
-
-  useEffect(() => {
-    console.log(barData)
-  }, [])
 
   const options = {
     responsive: true,

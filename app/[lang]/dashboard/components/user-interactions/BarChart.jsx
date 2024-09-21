@@ -47,18 +47,8 @@ const BasicBar = ({ height = 350, barData }) => {
       : []
   }
 
-  const footer = items => {
-    console.log(items)
-    return 'sdad'
-  }
-
   const options = {
     responsive: true,
-    tooltip: {
-      callbacks: {
-        footer: footer
-      }
-    },
 
     scales: {
       y: {
