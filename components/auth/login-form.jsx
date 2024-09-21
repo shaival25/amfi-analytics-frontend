@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -73,15 +73,42 @@ const LogInForm = () => {
         else router.push('/error-page/401')
       }
     } catch (err) {
-      // if (err.response.status === 409) {
-      //   setErrorMessage('Invalid email or password. Please try again.') // Set error message
-      //   toast.error('Invalid email or password')
-      //   return
-      // }
       setIsPending(false)
+      if (err.response.status === 409) {
+        setErrorMessage('Invalid email or password. Please try again.') // Set error message
+        toast.error('Invalid email or password')
+        return
+      }
       handleError(err, router)
     }
   }
+
+  const authenticateUser = async () => {
+    const authToken = Cookies.get('authToken')
+    if (authToken) {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/users/authenticate`,
+          {
+            headers: {
+              'x-auth-token': authToken
+            }
+          }
+        )
+        if (response.status === 200) {
+          router.push('/dashboard')
+        }
+      } catch (error) {
+        handleError(error, router)
+      }
+    } else {
+      router.push('/auth/login')
+    }
+  }
+
+  useEffect(() => {
+    authenticateUser()
+  }, [])
   return (
     <div className='w-full py-10'>
       <Link href='/dashboard' className='inline-block'>
