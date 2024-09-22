@@ -144,7 +144,7 @@ const ModuleSidebar = ({ trans }) => {
       <div className='main-sidebar  pointer-events-none fixed start-0 top-0 z-[60] flex h-full xl:z-10 print:hidden'>
         <div
           className={cn(
-            'border-default-200  dark:border-default-300 pointer-events-auto relative z-20 flex h-full w-[72px] flex-col border-r border-dashed   bg-card transition-all duration-300',
+            'border-default-200  dark:border-default-300 pointer-events-auto relative z-20 flex h-full w-[72px] flex-col bg-card transition-all duration-300',
             {
               'ltr:-translate-x-full rtl:translate-x-full ltr:xl:translate-x-0  rtl:xl:translate-x-0':
                 !collapsed && subMenu,
@@ -180,7 +180,7 @@ const ModuleSidebar = ({ trans }) => {
 
         <div
           className={cn(
-            'border-default-200 pointer-events-auto relative z-10 flex flex-col h-full w-[228px] border-r  bg-card   transition-all duration-300',
+            'border-default-200 pointer-events-auto relative z-10 flex flex-col h-full w-[228px] bg-card   transition-all duration-300',
             {
               'rtl:translate-x-[calc(100%_+_72px)] translate-x-[calc(-100%_-_72px)]':
                 collapsed || subMenu

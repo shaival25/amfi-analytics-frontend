@@ -134,8 +134,9 @@ const CheckboxWithAction = () => {
                 )}
               </TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Gender</TableHead>
+              <TableHead>Address</TableHead>
               <TableHead>Phone Number</TableHead>
-              {/* <TableHead>Action</TableHead> */}
             </TableRow>
           </TableHeader>
 
@@ -169,7 +170,11 @@ const CheckboxWithAction = () => {
 
                 {/* <TableCell>{item.title}</TableCell> */}
                 <TableCell>{item.email}</TableCell>
-                <TableCell>{item.number}</TableCell>
+                <TableCell>{item.gender}</TableCell>
+                <TableCell>
+                  {item.city}, {item.state}
+                </TableCell>
+                <TableCell>{item.contactNumber}</TableCell>
                 {/* <TableCell>
               <Badge
                 variant="soft"

@@ -60,7 +60,7 @@ const ReportsSnapshot = ({ selectedBuses }) => {
       <CardHeader className='border-none pb-0'>
         <div className='flex items-center gap-2 flex-wrap '>
           <div className='flex-1'>
-            <div className='text-xl font-semibold text-default-900'>
+            <div className='text-xl font-semibold text-default-800'>
               Live Visitors Count{' '}
               <svg className='inline-flex' width='40' height='40'>
                 <circle fill='#ff0000' stroke='none' cx='20' cy='20' r='8'>

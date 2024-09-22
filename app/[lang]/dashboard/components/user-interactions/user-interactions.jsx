@@ -31,7 +31,7 @@ const UserInteractions = ({ selectedBuses }) => {
   return (
     <Card className='mb-4'>
       <CardHeader className='flex-col-reverse sm:flex-row flex-wrap gap-2  border-none mb-0 pb-0'>
-        <span className='text-sm font-medium text-default-900 flex-1'>
+        <span className='text-sm font-medium text-default-800 flex-1'>
           User Interaction
         </span>
 

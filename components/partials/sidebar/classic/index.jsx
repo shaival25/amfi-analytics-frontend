@@ -67,14 +67,11 @@ const ClassicSidebar = ({ trans }) => {
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={cn(
-        'fixed  z-[999] top-0  bg-card h-full hover:!w-[248px]  border-r  ',
-        {
-          'w-[248px]': !collapsed,
-          'w-[72px]': collapsed,
-          'shadow-md': collapsed || hovered
-        }
-      )}
+      className={cn('fixed  z-[999] top-0  bg-card h-full hover:!w-[248px]', {
+        'w-[248px]': !collapsed,
+        'w-[72px]': collapsed,
+        'shadow-md': collapsed || hovered
+      })}
     >
       {sidebarBg !== 'none' && (
         <div

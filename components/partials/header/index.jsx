@@ -49,7 +49,7 @@ const Header = ({ handleOpenSearch, trans }) => {
           'sticky top-0': navbarType === 'sticky'
         })}
       >
-        <div className='w-full bg-card/90 backdrop-blur-lg md:px-6 px-[15px] py-3 border-b'>
+        <div className='w-full bg-card/90 backdrop-blur-lg md:px-6 px-[15px] py-3'>
           <div className='flex justify-between items-center h-full'>
             <VerticalHeader
               sidebarType={sidebarType}

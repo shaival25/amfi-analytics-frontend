@@ -8,6 +8,7 @@ export const useThemeStore = create((set) => ({
   setRadius: (value) => set({ radius: value }),
   layout: siteConfig.layout,
   setLayout: (value) => {
+    console.log("here", siteConfig.theme);
     set({ layout: value });
 
     // If the new layout is "semibox," also set the sidebarType to "popover"

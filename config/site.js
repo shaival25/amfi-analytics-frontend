@@ -1,7 +1,7 @@
 export const siteConfig = {
-  name: "Bharat Nivesh Yatra Admin",
+  name: "Admin | Bharat Nivesh Yatra",
   description: null,
-  theme: "green",
+  theme: "custom",
   layout: "vertical",
   // semibox, horizontal, vertical
   hideSideBar: false,
