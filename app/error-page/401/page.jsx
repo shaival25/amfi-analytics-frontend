@@ -1,18 +1,15 @@
 'use client'
 import Image from 'next/image'
 import lightImage from '@/public/images/error/light-401.png'
-import darkImage from '@/public/images/error/dark-401.png'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { useTheme } from 'next-themes'
 const ErrorPage = () => {
-  const { theme } = useTheme()
   return (
     <div className='min-h-screen  overflow-y-auto flex justify-center items-center p-10'>
       <div className='w-full flex flex-col items-center'>
         <div className='max-w-[542px]'>
           <Image
-            src={theme === 'dark' ? darkImage : lightImage}
+            src={lightImage}
             alt='error image'
             className='w-full h-full object-cover'
           />

@@ -47,23 +47,12 @@ const QuestionBar = ({ height = 350, barData, index }) => {
         grid: {
           drawTicks: false,
           color: 'rgba(0, 0, 0, 0)'
-        },
-        ticks: {
-          color: `hsl(${
-            theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].chartLabel
-          })`
         }
       },
       x: {
         grid: {
           drawTicks: false,
           color: 'rgba(0, 0, 0, 0)'
-        },
-
-        ticks: {
-          color: `hsl(${
-            theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].chartLabel
-          })`
         }
       }
     },

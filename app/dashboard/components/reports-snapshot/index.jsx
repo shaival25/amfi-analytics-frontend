@@ -51,9 +51,7 @@ const ReportsSnapshot = ({ selectedBuses }) => {
   const { theme: config, setTheme: setConfig } = useThemeStore()
   const { theme: mode } = useTheme()
   const theme = themes.find(theme => theme.name === config)
-  const primary = `hsl(${
-    theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].primary
-  })`
+  const primary = `hsl(${theme?.cssVars['light'].primary})`
 
   return (
     <Card>

@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation'
 import { MFLogo } from '@/components/svg'
 import { BeatLoader } from 'react-spinners'
 import { DayPicker } from 'react-day-picker'
+// import 'react-day-picker/style.css'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 const DashboardPageView = ({ trans }) => {
@@ -165,7 +166,9 @@ const DashboardPageView = ({ trans }) => {
                   Heat Maps
                 </div>
               </div>
-              <div className='flex-none'>{/* <DayPicker /> */}</div>
+              <div className='flex-none'>
+                <DayPicker />
+              </div>
             </div>
           </CardHeader>
           <CardContent className=' mb-2'>

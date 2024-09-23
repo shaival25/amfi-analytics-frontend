@@ -22,12 +22,8 @@ const BasicBar = ({ height = 350, barData }) => {
 
   const theme = themes.find(theme => theme.name === config)
 
-  const hslPrimary = `hsla(${
-    theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].primary
-  })`
-  const hslSuccess = `hsla(${
-    theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].success
-  })`
+  const hslPrimary = `hsla(${theme?.cssVars['light'].primary})`
+  const hslSuccess = `hsla(${theme?.cssVars['light'].success})`
 
   const data = {
     labels: barData?.labels,
@@ -57,9 +53,7 @@ const BasicBar = ({ height = 350, barData }) => {
           color: 'rgba(0, 0, 0, 0)'
         },
         ticks: {
-          color: `hsl(${
-            theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].chartLabel
-          })`
+          color: `hsl(${theme?.cssVars['light'].chartLabel})`
         }
       },
       x: {
@@ -69,9 +63,7 @@ const BasicBar = ({ height = 350, barData }) => {
         },
 
         ticks: {
-          color: `hsl(${
-            theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].chartLabel
-          })`
+          color: `hsl(${theme?.cssVars['light'].chartLabel})`
         }
       }
     },

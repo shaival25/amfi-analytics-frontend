@@ -26,7 +26,7 @@ const CricketerPreference = ({ height = 250, mascotRank }) => {
       enabled: true
     },
     tooltip: {
-      theme: mode === 'dark' ? 'dark' : 'light'
+      theme: 'light'
     },
     stroke: {
       width: 0
@@ -41,33 +41,21 @@ const CricketerPreference = ({ height = 250, mascotRank }) => {
               show: true,
               fontSize: '14px',
               fontWeight: 600,
-              colors: `hsl(${
-                theme?.cssVars[
-                  mode === 'dark' || mode === 'system' ? 'dark' : 'light'
-                ].chartLabel
-              })`
+              colors: `hsl(${theme?.cssVars['light'].chartLabel})`
             },
             value: {
               show: true,
               label: 'Total',
               fontSize: '14px',
               fontWeight: 600,
-              color: `hsl(${
-                theme?.cssVars[
-                  mode === 'dark' || mode === 'system' ? 'dark' : 'light'
-                ].chartLabel
-              })`
+              color: `hsl(${theme?.cssVars['light'].chartLabel})`
             },
             total: {
               show: true,
               label: 'Total',
               fontSize: '16px',
               fontWeight: 600,
-              color: `hsl(${
-                theme?.cssVars[
-                  mode === 'dark' || mode === 'system' ? 'dark' : 'light'
-                ].chartLabel
-              })`
+              color: `hsl(${theme?.cssVars['light'].chartLabel})`
             }
           }
         }
@@ -76,11 +64,7 @@ const CricketerPreference = ({ height = 250, mascotRank }) => {
     legend: {
       position: 'bottom',
       labels: {
-        colors: `hsl(${
-          theme?.cssVars[
-            mode === 'dark' || mode === 'system' ? 'dark' : 'light'
-          ].chartLabel
-        })`
+        colors: `hsl(${theme?.cssVars['light'].chartLabel})`
       },
       itemMargin: {
         horizontal: 10,
