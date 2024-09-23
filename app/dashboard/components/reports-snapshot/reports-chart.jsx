@@ -32,21 +32,28 @@ const ReportsChart = ({ series, chartColor, height = 300, labels }) => {
     },
     colors: [chartColor],
     tooltip: {
-      theme: 'light'
+      theme: mode === 'dark' ? 'dark' : 'light'
     },
-    grid: getGridConfig(`hsl(${theme?.cssVars['light'].chartGird})`),
+    grid: getGridConfig(
+      `hsl(${theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].chartGird})`
+    ),
     fill: {
       type: 'gradient',
       colors: chartColor,
       gradient: {
-        shadeIntensity: 0.1,
+        shadeIntensity: 0.9,
         opacityFrom: 0.4,
         opacityTo: 0.1,
         stops: [50, 100, 0]
       }
     },
-    yaxis: getYAxisConfig(`hsl(${theme?.cssVars['light'].chartLabel})`),
-    xaxis: getXAxisConfig(`hsl(${theme?.cssVars['light'].chartLabel})`, labels),
+    yaxis: getYAxisConfig(
+      `hsl(${theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].chartLabel})`
+    ),
+    xaxis: getXAxisConfig(
+      `hsl(${theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].chartLabel})`,
+      labels
+    ),
     padding: {
       top: 0,
       right: 0,

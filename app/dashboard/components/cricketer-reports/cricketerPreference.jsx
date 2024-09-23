@@ -40,22 +40,19 @@ const CricketerPreference = ({ height = 250, mascotRank }) => {
             name: {
               show: true,
               fontSize: '14px',
-              fontWeight: 600,
-              colors: `hsl(${theme?.cssVars['light'].chartLabel})`
+              fontWeight: 600
             },
             value: {
               show: true,
               label: 'Total',
               fontSize: '14px',
-              fontWeight: 600,
-              color: `hsl(${theme?.cssVars['light'].chartLabel})`
+              fontWeight: 600
             },
             total: {
               show: true,
               label: 'Total',
               fontSize: '16px',
-              fontWeight: 600,
-              color: `hsl(${theme?.cssVars['light'].chartLabel})`
+              fontWeight: 600
             }
           }
         }
@@ -63,9 +60,7 @@ const CricketerPreference = ({ height = 250, mascotRank }) => {
     },
     legend: {
       position: 'bottom',
-      labels: {
-        colors: `hsl(${theme?.cssVars['light'].chartLabel})`
-      },
+
       itemMargin: {
         horizontal: 10,
         vertical: 8

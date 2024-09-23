@@ -15,10 +15,6 @@ import handleError from '@/validation/unauthorized'
 import { useRouter } from 'next/navigation'
 import { MFLogo } from '@/components/svg'
 import { BeatLoader } from 'react-spinners'
-import { DayPicker } from 'react-day-picker'
-// import 'react-day-picker/style.css'
-import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
 const DashboardPageView = ({ trans }) => {
   const [selectedBuses, setSelectedBuses] = useState(['all'])
   const dashboardRef = useRef()
@@ -81,7 +77,13 @@ const DashboardPageView = ({ trans }) => {
 
   const handlePrint = useReactToPrint({
     content: () => dashboardRef.current,
-    documentTitle: `Dashboard Report - ${getSelectedBusNames().join(', ')}`,
+    documentTitle: `Dashboard Report - ${getSelectedBusNames().join(
+      ', '
+    )} - ${new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit'
+    }).format(new Date())}`,
     copyStyles: true,
     pageStyle: ``,
     onBeforePrint: () => {
@@ -121,7 +123,7 @@ const DashboardPageView = ({ trans }) => {
         )}
         <div className='flex items-center flex-wrap justify-between gap-4'>
           <div className='text-2xl font-medium text-default-800 '>
-            Analytics {trans?.dashboard}
+            Analytics
           </div>
           {!showPrintLogo && (
             <Button
@@ -166,9 +168,7 @@ const DashboardPageView = ({ trans }) => {
                   Heat Maps
                 </div>
               </div>
-              <div className='flex-none'>
-                <DayPicker />
-              </div>
+              <div className='flex-none'></div>
             </div>
           </CardHeader>
           <CardContent className=' mb-2'>

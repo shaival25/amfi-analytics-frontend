@@ -9,22 +9,10 @@ import {
   Tooltip,
   Legend
 } from 'chart.js'
-import { hslToHex, hexToRGB } from '@/lib/utils'
-import { useThemeStore } from '@/store'
-import { useTheme } from 'next-themes'
-import { themes } from '@/config/thems'
 import { Bar } from 'react-chartjs-2'
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const BasicBar = ({ height = 350, barData }) => {
-  const { theme: config, setTheme: setConfig } = useThemeStore()
-  const { theme: mode } = useTheme()
-
-  const theme = themes.find(theme => theme.name === config)
-
-  const hslPrimary = `hsla(${theme?.cssVars['light'].primary})`
-  const hslSuccess = `hsla(${theme?.cssVars['light'].success})`
-
   const data = {
     labels: barData?.labels,
     datasets: barData.datasets
@@ -51,19 +39,12 @@ const BasicBar = ({ height = 350, barData }) => {
         grid: {
           drawTicks: false,
           color: 'rgba(0, 0, 0, 0)'
-        },
-        ticks: {
-          color: `hsl(${theme?.cssVars['light'].chartLabel})`
         }
       },
       x: {
         grid: {
           drawTicks: false,
           color: 'rgba(0, 0, 0, 0)'
-        },
-
-        ticks: {
-          color: `hsl(${theme?.cssVars['light'].chartLabel})`
         }
       }
     },

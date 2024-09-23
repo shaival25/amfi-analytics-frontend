@@ -1,18 +1,11 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useThemeStore } from '@/store'
-import { useTheme } from 'next-themes'
-import { themes } from '@/config/thems'
 import { useEffect, useState } from 'react'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 const CricketerPreference = ({ height = 250, goalsSelected }) => {
-  const { theme: config, isRtl } = useThemeStore()
-  const { theme: mode } = useTheme()
-  const theme = themes.find(theme => theme.name === config)
-
   // Use state for series and options
   const [series, setSeries] = useState([])
   const [options, setOptions] = useState({
@@ -40,22 +33,19 @@ const CricketerPreference = ({ height = 250, goalsSelected }) => {
             name: {
               show: true,
               fontSize: '14px',
-              fontWeight: 600,
-              colors: `hsl(${theme?.cssVars['light'].chartLabel})`
+              fontWeight: 600
             },
             value: {
               show: true,
               label: 'Total',
               fontSize: '14px',
-              fontWeight: 600,
-              color: `hsl(${theme?.cssVars['light'].chartLabel})`
+              fontWeight: 600
             },
             total: {
               show: true,
               label: 'Total',
               fontSize: '16px',
-              fontWeight: 600,
-              color: `hsl(${theme?.cssVars['light'].chartLabel})`
+              fontWeight: 600
             }
           }
         }
@@ -63,9 +53,7 @@ const CricketerPreference = ({ height = 250, goalsSelected }) => {
     },
     legend: {
       position: 'bottom',
-      labels: {
-        colors: `hsl(${theme?.cssVars['light'].chartLabel})`
-      },
+
       itemMargin: {
         horizontal: 10,
         vertical: 8
@@ -74,7 +62,7 @@ const CricketerPreference = ({ height = 250, goalsSelected }) => {
         width: 10,
         height: 10,
         radius: 10,
-        offsetX: isRtl ? 5 : -5
+        offsetX: -5
       }
     },
     padding: {
