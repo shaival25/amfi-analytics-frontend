@@ -1,7 +1,7 @@
 'use client'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { Cup, Eye, Increase, Session } from '@/components/svg'
+import { Eye, Session } from '@/components/svg'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -10,71 +10,6 @@ import handleError from '@/validation/unauthorized'
 import CricketerPreference from './cricketer-reports/cricketerPreference'
 import GoalsSelected from './goals-selected/goalsSelected'
 const ReportsArea = ({ selectedBuses }) => {
-  const reports = [
-    {
-      id: 1,
-      name: 'Page Views',
-      count: '11,236',
-      rate: '202',
-      isUp: false,
-      icon: <Eye className='h-4 w-4' />,
-      color: 'info'
-    },
-    {
-      id: 2,
-      name: 'Sessions',
-      count: '6,132',
-      rate: '150',
-      isUp: true,
-      icon: <Session className='h-4 w-4' />,
-      color: 'primary'
-    },
-    {
-      id: 3,
-      name: 'Avg. Duration',
-      count: '46s',
-      rate: '22',
-      isUp: true,
-      icon: <Increase className='h-4 w-4' />,
-      color: 'warning'
-    },
-    {
-      id: 4,
-      name: 'Bounce Rate',
-      count: '46s',
-      rate: '30',
-      isUp: false,
-      icon: <Cup className='h-4 w-4' />,
-      color: 'destructive'
-    },
-    {
-      id: 5,
-      name: 'Bounce Rate',
-      count: '46s',
-      rate: '30',
-      isUp: false,
-      icon: <Cup className='h-4 w-4' />,
-      color: 'destructive'
-    },
-    {
-      id: 6,
-      name: 'Bounce Rate',
-      count: '46s',
-      rate: '30',
-      isUp: false,
-      icon: <Cup className='h-4 w-4' />,
-      color: 'destructive'
-    },
-    {
-      id: 7,
-      name: 'Bounce Rate',
-      count: '46s',
-      rate: '30',
-      isUp: false,
-      icon: <Cup className='h-4 w-4' />,
-      color: 'destructive'
-    }
-  ]
   const [fullCount, setFullCount] = useState(0)
   const [mascotRank, setMascotRank] = useState({})
   const [totalCricketerCount, setTotalCricketerCount] = useState(0)
