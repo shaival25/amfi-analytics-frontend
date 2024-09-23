@@ -5,7 +5,6 @@ import { useSidebar, useThemeStore } from '@/store'
 import ProfileInfo from './profile-info'
 import VerticalHeader from './vertical-header'
 
-import Language from './language'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import MobileMenuHandler from './mobile-menu-handler'
 import ClassicHeader from './layout/classic-header'

@@ -7,21 +7,9 @@ export { default as SemiBoxSvg } from "./layout/semibox.svg";
 export { default as DSearch } from "./duel-tone/dsearch.svg";
 export { default as Session } from "./home/session.svg";
 export { default as Eye } from "./home/eye.svg";
-export { default as Increase } from "./home/increase.svg";
-export { default as Cup } from "./home/cup.svg";
-export { default as CupBar } from "./home/cup-bar.svg";
-export { default as NoteIcon } from "./home/note.svg";
 export { default as Users } from "./home/users.svg";
-export { default as Counter } from "./home/counter.svg";
-export { default as Docs } from "./home/docs.svg";
-export { default as CheckShape } from "./home/check-shape.svg";
 export { default as DocsCheck } from "./duel-tone/docs-check.svg";
 export { default as DocsArrow } from "./duel-tone/docs-arrow.svg";
-export { default as Spam } from "./home/spam.svg";
-export { default as Stacks } from "./home/stack.svg";
-export { default as CheckMark } from "./home/check-mark.svg";
-export { default as Alert2 } from "./home/alert.svg";
-export { default as Crown } from "./home/crown.svg";
 export { default as Cup1 } from "./duel-tone/cup.svg";
 export { default as Bell } from "./duel-tone/bell.svg";
 export { default as ColorPalate } from "./duel-tone/color-palater.svg";
@@ -90,4 +78,3 @@ export { default as Moon } from "./duel-tone/moon.svg";
 export { default as Device } from "./duel-tone/device.svg";
 
 // sidebar icon
-export { default as FolderTree } from "./home/foldertree.svg";
