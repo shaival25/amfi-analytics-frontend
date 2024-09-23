@@ -226,10 +226,10 @@ const ToggleDialog = ({ icon, id, fetchRoles, fetchUserDetails }) => {
             )}
             {activeIndex === 3 && (
               <div className="flex flex-col items-center ">
-                <span className="text-7xl text-success">
-                  <Icon icon="material-symbols:check-circle-outline" />
+                <span className="text-7xl text-danger">
+                  <Icon icon="material-symbols:error-outline" />
                 </span>
-                <h3 className="mt-3 text-success  text-2xl font-semibold">
+                <h3 className="mt-3 text-danger text-2xl font-semibold">
                   Error
                 </h3>
                 <p className="mt-4 text-lg font-semibold text-default-600">
