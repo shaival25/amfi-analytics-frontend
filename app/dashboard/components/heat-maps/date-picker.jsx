@@ -1,8 +1,4 @@
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
@@ -10,10 +6,8 @@ import { CalendarIcon } from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
 
 import { buttonVariants } from '@/components/ui/button'
-import { useState } from 'react'
-const HeatMapDatePicker = () => {
-  const [date, setDate] = useState(new Date())
 
+const HeatMapDatePicker = ({ date, setDate }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
