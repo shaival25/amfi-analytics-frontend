@@ -5,6 +5,8 @@ import BusSelect from './components/bus-select'
 import HeatMapArea from './components/heat-maps/heat-map'
 import UserInteractions from './components/user-interactions/user-interactions'
 import FeedBackInsights from './components/feedback-insights/feedbackInsights'
+import HeapMapDatePicker from './components/heat-maps/date-picker'
+import HeapMapTimeSlot from './components/heat-maps/time-slot'
 import { useState, useRef, useEffect } from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { useReactToPrint } from 'react-to-print'
@@ -15,14 +17,15 @@ import handleError from '@/validation/unauthorized'
 import { useRouter } from 'next/navigation'
 import { MFLogo } from '@/components/svg'
 import { BeatLoader } from 'react-spinners'
-const DashboardPageView = ({ trans }) => {
+
+const DashboardPageView = () => {
   const [selectedBuses, setSelectedBuses] = useState(['all'])
   const dashboardRef = useRef()
   const [showPrintLogo, setShowPrintLogo] = useState(false)
   const [backgroundBlur, setBackgroundBlur] = useState(false)
   const [buses, setBuses] = useState([])
-  const [date, setDate] = useState(new Date())
   const router = useRouter()
+  const [range, setRange] = useState([])
 
   const [feedbackInsights, setFeedBackInsights] = useState({})
 
@@ -168,7 +171,10 @@ const DashboardPageView = ({ trans }) => {
                   Heat Maps
                 </div>
               </div>
-              <div className='flex-none'></div>
+              <div className='flex gap-2'>
+                <HeapMapTimeSlot />
+                <HeapMapDatePicker />
+              </div>
             </div>
           </CardHeader>
           <CardContent className=' mb-2'>

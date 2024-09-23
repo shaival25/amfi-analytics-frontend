@@ -1,26 +1,37 @@
-import * as React from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { format } from 'date-fns'
+import { CalendarIcon } from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
 
-import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
+import { useState } from 'react'
+const HeatMapDatePicker = () => {
+  const [date, setDate] = useState(new Date())
 
-function Calendar ({
-  className,
-  classNames,
-  showOutsideDays = false,
-  isOpen,
-  ...props
-}) {
   return (
-    <div className='relative'>
-      {/* Button to toggle calendar visibility */}
-
-      {/* Conditionally render DayPicker based on isOpen state */}
-      {isOpen && (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant='outline'
+          className={cn('w-[240px] ltr:pl-3 text-left')}
+        >
+          {date ? format(date, 'PPP') : <span>Pick a date</span>}
+          <CalendarIcon className='ltr:ml-auto  h-4 w-4' />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent>
         <DayPicker
-          showOutsideDays={showOutsideDays}
-          className={cn('p-0 md:p-3', className)}
+          selected={date}
+          onSelect={setDate}
+          mode='single'
+          initialFocus
+          className={cn('p-0 md:p-3')}
           classNames={{
             months: 'w-full  space-y-4 sm:space-x-4 sm:space-y-0',
             month: 'space-y-4',
@@ -47,19 +58,12 @@ function Calendar ({
             day_disabled: 'text-muted-foreground opacity-50',
             day_range_middle:
               'aria-selected:bg-accent aria-selected:text-accent-foreground',
-            day_hidden: 'invisible',
-            ...classNames
+            day_hidden: 'invisible'
           }}
-          components={{
-            IconLeft: ({ ...props }) => <ChevronLeft className='h-4 w-4' />,
-            IconRight: ({ ...props }) => <ChevronRight className='h-4 w-4' />
-          }}
-          {...props}
         />
-      )}
-    </div>
+      </PopoverContent>
+    </Popover>
   )
 }
-Calendar.displayName = 'Calendar'
 
-export { Calendar }
+export default HeatMapDatePicker

@@ -14,7 +14,6 @@ import handleError from '@/validation/unauthorized'
 const ReportsSnapshot = ({ selectedBuses }) => {
   const router = useRouter()
   const [range, setRange] = useState(1)
-  const [fullCount, setFullCount] = useState(0)
   const [liveCount, setLiveCount] = useState([
     {
       data: []

@@ -44,8 +44,8 @@ const Header = ({ handleOpenSearch, trans }) => {
     return (
       <ClassicHeader
         className={cn('', {
-          'ltr:xl:ml-[248px] rtl:xl:mr-[248px]': !collapsed,
-          'ltr:xl:ml-[72px] rtl:xl:mr-[72px]': collapsed,
+          'ltr:xl:ml-[248px]': !collapsed,
+          'ltr:xl:ml-[72px]': collapsed,
           'sticky top-0': navbarType === 'sticky'
         })}
       >

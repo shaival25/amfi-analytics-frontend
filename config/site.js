@@ -8,7 +8,7 @@ export const siteConfig = {
   sidebarType: "popover",
   // popover, classic, module
   sidebarColor: null,
-  navbarType: "sticky",
+  navbarType: "static",
   // sticky, floating, static
   footerType: "static",
   // sticky,  static, hidden

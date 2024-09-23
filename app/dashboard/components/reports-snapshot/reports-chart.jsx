@@ -9,7 +9,6 @@ import {
   getXAxisConfig,
   getYAxisConfig
 } from '@/lib/appex-chart-options'
-import { useEffect } from 'react'
 
 const ReportsChart = ({ series, chartColor, height = 300, labels }) => {
   const { theme: config, setTheme: setConfig } = useThemeStore()
@@ -41,7 +40,7 @@ const ReportsChart = ({ series, chartColor, height = 300, labels }) => {
       type: 'gradient',
       colors: chartColor,
       gradient: {
-        shadeIntensity: 0.9,
+        shadeIntensity: 0.1,
         opacityFrom: 0.4,
         opacityTo: 0.1,
         stops: [50, 100, 0]

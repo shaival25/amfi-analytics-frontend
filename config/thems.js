@@ -68,7 +68,7 @@ export const themes = [
     label: "ustom",
     activeColor: {
       light: "169 91% 34%",
-      light: "169 91% 34%",
+      dark: "169 91% 34%",
     },
     cssVars: {
       light: {
@@ -95,10 +95,10 @@ export const themes = [
         warning: "25 95% 53%",
         success: "142 71% 45%",
         info: "189 94% 43%",
-        chartGird: "0 0% 0%",
+        chartGird: "169 91% 34%",
         chartLabel: "0 0% 0%",
       },
-      light: {
+      dark: {
         background: "169 100% 5%",
         foreground: "0 0% 98%",
         card: "169 100% 5%",
