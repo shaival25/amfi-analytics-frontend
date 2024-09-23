@@ -57,8 +57,6 @@ const ProfileInfo = () => {
           </div>
         </DropdownMenuLabel>
 
-        <DropdownMenuSeparator />
-
         <DropdownMenuSeparator className='mb-0 dark:bg-background' />
         <DropdownMenuItem
           onClick={() => signOut()}

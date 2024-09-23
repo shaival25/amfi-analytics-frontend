@@ -15,13 +15,16 @@ import handleError from '@/validation/unauthorized'
 import { useRouter } from 'next/navigation'
 import { MFLogo } from '@/components/svg'
 import { BeatLoader } from 'react-spinners'
-
+import { DayPicker } from 'react-day-picker'
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '@/components/ui/button'
 const DashboardPageView = ({ trans }) => {
   const [selectedBuses, setSelectedBuses] = useState(['all'])
   const dashboardRef = useRef()
   const [showPrintLogo, setShowPrintLogo] = useState(false)
   const [backgroundBlur, setBackgroundBlur] = useState(false)
   const [buses, setBuses] = useState([])
+  const [date, setDate] = useState(new Date())
   const router = useRouter()
 
   const [feedbackInsights, setFeedBackInsights] = useState({})
@@ -155,8 +158,15 @@ const DashboardPageView = ({ trans }) => {
         </Card>
 
         <Card>
-          <CardHeader className='flex-col-reverse sm:flex-row flex-wrap gap-2  border-none mb-0 pb-0'>
-            Heat Maps
+          <CardHeader className='border-none pb-0'>
+            <div className='flex items-center gap-2 flex-wrap '>
+              <div className='flex-1'>
+                <div className='text-xl font-semibold text-default-800'>
+                  Heat Maps
+                </div>
+              </div>
+              <div className='flex-none'>{/* <DayPicker /> */}</div>
+            </div>
           </CardHeader>
           <CardContent className=' mb-2'>
             <HeatMapArea
