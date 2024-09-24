@@ -6,7 +6,6 @@ import DashboardSelect from '../range-select'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { themes } from '@/config/thems'
-import { useTheme } from 'next-themes'
 import { useThemeStore } from '@/store'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
@@ -16,6 +15,7 @@ const ReportsSnapshot = ({ selectedBuses }) => {
   const [range, setRange] = useState(1)
   const [liveCount, setLiveCount] = useState([
     {
+      name: 'users count',
       data: []
     }
   ])
@@ -48,7 +48,6 @@ const ReportsSnapshot = ({ selectedBuses }) => {
   }, [range, selectedBuses])
 
   const { theme: config, setTheme: setConfig } = useThemeStore()
-  const { theme: mode } = useTheme()
   const theme = themes.find(theme => theme.name === config)
   const primary = `hsl(${theme?.cssVars['light'].primary})`
 
