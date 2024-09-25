@@ -4,25 +4,30 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import BarChart from './BarChart'
-const UserInteractions = ({ selectedBuses }) => {
+import handleError from '@/validation/unauthorized'
+const UserInteractions = ({ selectedBuses, router }) => {
   const [range, setRange] = useState('default')
   const [barData, setBarData] = useState({})
 
   const fetchUserInteractionsUsingRange = async range => {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/user-interactions`,
-      {
-        selectedBuses,
-        option: range
-      },
-      {
-        headers: {
-          'x-auth-token': Cookies.get('authToken')
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/user-interactions`,
+        {
+          selectedBuses,
+          option: range
+        },
+        {
+          headers: {
+            'x-auth-token': Cookies.get('authToken')
+          }
         }
+      )
+      if (response.data.success === true) {
+        setBarData(response.data.data)
       }
-    )
-    if (response.data.success === true) {
-      setBarData(response.data.data)
+    } catch (error) {
+      handleError(error, router)
     }
   }
   useEffect(() => {

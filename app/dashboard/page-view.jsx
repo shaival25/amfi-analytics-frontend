@@ -68,19 +68,23 @@ const DashboardPageView = () => {
   }, [selectedBuses, date, selectedTimeSlots])
 
   const fetchFeedbackInsights = async () => {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/feedback-insights`,
-      {
-        selectedBuses
-      },
-      {
-        headers: {
-          'x-auth-token': Cookies.get('authToken')
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/feedback-insights`,
+        {
+          selectedBuses
+        },
+        {
+          headers: {
+            'x-auth-token': Cookies.get('authToken')
+          }
         }
+      )
+      if (response.status === 200) {
+        setFeedBackInsights(response.data)
       }
-    )
-    if (response.status === 200) {
-      setFeedBackInsights(response.data)
+    } catch (error) {
+      handleError(error, router)
     }
   }
 
@@ -194,7 +198,7 @@ const DashboardPageView = () => {
         <div className='grid grid-cols-3  gap-2 '>
           <ReportsArea selectedBuses={selectedBuses} />
         </div>
-        <UserInteractions selectedBuses={selectedBuses} />
+        <UserInteractions selectedBuses={selectedBuses} router={router} />
         <Card>
           <CardHeader>Feedback Insights</CardHeader>
           <CardContent>
