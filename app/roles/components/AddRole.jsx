@@ -141,7 +141,7 @@ const AddRole = ({ fetchAllRoles, fetchAllPermissions }) => {
               />
             </div>
           </div>
-          <Table>
+          <Table className='text-left'>
             <TableHeader>
               <TableRow>
                 <TableHead>Permissions</TableHead>
@@ -159,7 +159,7 @@ const AddRole = ({ fetchAllRoles, fetchAllPermissions }) => {
                     const isDisabled = !checkPermission(type, action)
                     const isChecked = isPermissionEnabled(type, action)
                     return (
-                      <TableCell key={action}>
+                      <TableCell key={action} className='last:text-left'>
                         <Switch
                           checked={isChecked}
                           onClick={() => handleSwitchChange(type, action)}
