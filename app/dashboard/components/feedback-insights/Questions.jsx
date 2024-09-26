@@ -62,7 +62,7 @@ const QuestionBar = ({ height = 350, barData, index }) => {
 
   return (
     <div>
-      <Bar options={options} data={data} height={height} width={'100%'} />
+      <Bar options={options} data={data} height={height} />
     </div>
   )
 }

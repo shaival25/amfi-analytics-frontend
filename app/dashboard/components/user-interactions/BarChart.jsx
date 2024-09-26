@@ -54,7 +54,7 @@ const BasicBar = ({ height = 350, barData }) => {
 
   return (
     <div>
-      <Bar options={options} data={data} height={height} width={'100%'} />
+      <Bar options={options} data={data} height={height} />
     </div>
   )
 }
