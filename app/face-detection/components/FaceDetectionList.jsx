@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import React, { useEffect, useState } from "react";
-import { Icon } from "@iconify/react";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from 'react'
+import { Icon } from '@iconify/react'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -10,131 +10,131 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Avatar } from "@/components/ui/avatar";
-import axios from "axios";
-import Cookies from "js-cookie";
-import handleError from "@/validation/unauthorized";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-import { CSVLink } from "react-csv";
+  TableRow
+} from '@/components/ui/table'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Avatar } from '@/components/ui/avatar'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import handleError from '@/validation/unauthorized'
+import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
+import { CSVLink } from 'react-csv'
 
 const CheckboxWithAction = () => {
-  const [users, setUsers] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
-  const router = useRouter();
-  const [fileName, setFileName] = useState("");
+  const [users, setUsers] = useState([])
+  const [selectedRows, setSelectedRows] = useState([])
+  const router = useRouter()
+  const [fileName, setFileName] = useState('')
 
-  const handleSelectAll = (event) => {
+  const handleSelectAll = event => {
     if (selectedRows?.length === users?.length) {
-      setSelectedRows([]);
+      setSelectedRows([])
     } else {
-      setSelectedRows(users.map((row) => row._id));
+      setSelectedRows(users.map(row => row._id))
     }
-  };
+  }
 
-  const handleRowSelect = (id) => {
-    const updatedSelectedRows = [...selectedRows];
+  const handleRowSelect = id => {
+    const updatedSelectedRows = [...selectedRows]
     if (selectedRows.includes(id)) {
-      updatedSelectedRows.splice(selectedRows.indexOf(id), 1);
+      updatedSelectedRows.splice(selectedRows.indexOf(id), 1)
     } else {
-      updatedSelectedRows.push(id);
+      updatedSelectedRows.push(id)
     }
-    setSelectedRows(updatedSelectedRows);
-  };
+    setSelectedRows(updatedSelectedRows)
+  }
   const fetchFaceDetectionDetails = async () => {
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/bnyGeneral`,
         {
           headers: {
-            "x-auth-token": Cookies.get("authToken"),
-          },
+            'x-auth-token': Cookies.get('authToken')
+          }
         }
-      );
+      )
       if (response.status === 200) {
-        setUsers(response.data);
+        setUsers(response.data)
       }
     } catch (error) {
-      handleError(error, router);
+      handleError(error, router)
     }
-  };
+  }
   const handleDeleteUserById = async () => {
     try {
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/bnyGeneral`,
         {
           headers: {
-            "x-auth-token": Cookies.get("authToken"),
+            'x-auth-token': Cookies.get('authToken')
           },
           data: {
-            selectedRows,
-          },
+            selectedRows
+          }
         }
-      );
+      )
       if (response.status === 200) {
-        fetchFaceDetectionDetails();
-        toast.success("User deleted successfully");
+        fetchFaceDetectionDetails()
+        toast.success('User deleted successfully')
       }
     } catch (error) {
-      handleError(error, router);
+      handleError(error, router)
     }
-  };
+  }
   useEffect(() => {
-    fetchFaceDetectionDetails();
-  }, []);
+    fetchFaceDetectionDetails()
+  }, [])
 
-  const calculateAge = (dob) => {
-    const dobDate = new Date(dob);
-    const today = new Date();
+  const calculateAge = dob => {
+    const dobDate = new Date(dob)
+    const today = new Date()
 
-    let age = today.getFullYear() - dobDate.getFullYear();
-    const monthDiff = today.getMonth() - dobDate.getMonth();
-    const dayDiff = today.getDate() - dobDate.getDate();
+    let age = today.getFullYear() - dobDate.getFullYear()
+    const monthDiff = today.getMonth() - dobDate.getMonth()
+    const dayDiff = today.getDate() - dobDate.getDate()
     if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-      age--;
+      age--
     }
 
-    return age;
-  };
+    return age
+  }
 
   const csvHeaders = [
-    { label: "Name", key: "fullName" },
-    { label: "Email", key: "email" },
-    { label: "Gender", key: "gender" },
-    { label: "City", key: "city" },
-    { label: "State", key: "state" },
-    { label: "Phone Number", key: "contactNumber" },
-    { label: "Age", key: "age" },
-  ];
+    { label: 'Name', key: 'fullName' },
+    { label: 'Email', key: 'email' },
+    { label: 'Gender', key: 'gender' },
+    { label: 'City', key: 'city' },
+    { label: 'State', key: 'state' },
+    { label: 'Phone Number', key: 'contactNumber' },
+    { label: 'Age', key: 'age' }
+  ]
 
-  const csvData = users.map((user) => ({
+  const csvData = users.map(user => ({
     fullName: user.fullName,
     email: user.email,
     gender: user.gender,
     city: user.city,
     state: user.state,
     contactNumber: user.contactNumber,
-    age: calculateAge(user.dob),
-  }));
+    age: calculateAge(user.dob)
+  }))
   const handleFileName = () => {
-    const today = new Date();
-    let year = today.getFullYear();
-    const month = today.getMonth() + 1;
-    console.log(month);
-    const day = today.getDate();
-    const name = "Users_KYC_data_" + day + "/" + month + "/" + year + ".csv";
-    setFileName(name);
-  };
+    const today = new Date()
+    let year = today.getFullYear()
+    const month = today.getMonth() + 1
+    console.log(month)
+    const day = today.getDate()
+    const name = 'Users_KYC_data_' + day + '/' + month + '/' + year + '.csv'
+    setFileName(name)
+  }
   return (
     <>
       <div
         style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginTop: "10px",
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: '10px'
         }}
       >
         <CSVLink
@@ -142,13 +142,13 @@ const CheckboxWithAction = () => {
           headers={csvHeaders}
           filename={fileName}
           style={{
-            marginTop: "20px",
-            marginBottom: "0px",
+            marginTop: '20px',
+            marginBottom: '0px'
           }}
         >
           <Button
-            className="btn btn-primary"
-            style={{ backgroundColor: "#35C2DB" }}
+            className='btn btn-primary'
+            style={{ backgroundColor: '#35C2DB' }}
             onClick={handleFileName}
           >
             Export to CSV
@@ -160,49 +160,47 @@ const CheckboxWithAction = () => {
           <TableHeader>
             <TableRow>
               {localStorage
-                .getItem("userPermissions")
-                .includes("bnyGeneral:delete") && (
+                .getItem('userPermissions')
+                .includes('bnyGeneral:delete') && (
                 <TableHead>
                   <Checkbox
                     checked={
                       (selectedRows.length === users.length &&
                         selectedRows.length > 0) ||
-                      "indeterminate"
+                      'indeterminate'
                     }
                     onCheckedChange={handleSelectAll}
                   />
                 </TableHead>
               )}
 
-              <TableHead className=" font-semibold">
+              <TableHead className=' font-semibold'>
                 {selectedRows.length === users.length &&
                 selectedRows.length > 0 ? (
-                  <div className=" flex gap-2">
+                  <div className=' flex gap-2'>
                     <Button
-                      size="xs"
-                      variant="outline"
-                      className=" text-xs "
-                      color="destructive"
+                      size='xs'
+                      variant='outline'
+                      className=' text-xs '
+                      color='destructive'
                       onClick={() => handleDeleteUserById()}
                     >
                       Delete all
                     </Button>
                   </div>
                 ) : selectedRows.length > 0 ? (
-                  <div className=" flex gap-2">
+                  <div className=' flex gap-2'>
                     <Button
-                      size="xs"
-                      variant="outline"
-                      className=" text-xs "
-                      color="destructive"
+                      size='xs'
+                      variant='outline'
+                      className=' text-xs '
+                      color='destructive'
                       onClick={() => handleDeleteUserById()}
                     >
                       Delete
                     </Button>
                   </div>
-                ) : (
-                  "Name"
-                )}
+                ) : null}
               </TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
@@ -214,11 +212,11 @@ const CheckboxWithAction = () => {
           </TableHeader>
 
           <TableBody>
-            {users?.map((item) => (
+            {users?.map(item => (
               <TableRow
                 key={item._id}
-                className="hover:bg-muted"
-                data-state={selectedRows.includes(item._id) && "selected"}
+                className='hover:bg-muted'
+                data-state={selectedRows.includes(item._id) && 'selected'}
               >
                 <TableCell>
                   <Checkbox
@@ -226,16 +224,16 @@ const CheckboxWithAction = () => {
                     onCheckedChange={() => handleRowSelect(item._id)}
                   />
                 </TableCell>
-                <TableCell className="font-medium  text-card-foreground/80">
-                  <div className="flex gap-3 items-center">
-                    <Avatar className="rounded-full">
+                <TableCell className='font-medium  text-card-foreground/80'>
+                  <div className='flex gap-3 items-center'>
+                    <Avatar className='rounded-full'>
                       <img
                         src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${item.image}`}
                         alt={item.name}
                       />
                       {/* <AvatarFallback>AB</AvatarFallback> */}
                     </Avatar>
-                    <span className=" text-sm   text-card-foreground">
+                    <span className=' text-sm   text-card-foreground'>
                       {item.name}
                     </span>
                   </div>
@@ -299,7 +297,7 @@ const CheckboxWithAction = () => {
         </Table>
       )}
     </>
-  );
-};
+  )
+}
 
-export default CheckboxWithAction;
+export default CheckboxWithAction
