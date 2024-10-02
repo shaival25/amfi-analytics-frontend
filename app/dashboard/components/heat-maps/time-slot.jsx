@@ -22,11 +22,12 @@ const HeatMapTimeSlot = ({ selectedTimeSlots, setSelectedTimeSlots }) => {
   })
 
   useEffect(() => {
-    const date = new Date()
-    const hour = date.getHours()
-    setSelectedTimeSlots({
-      [timeSlots[hour].value]: true
-    })
+    setSelectedTimeSlots(
+      timeSlots.reduce((acc, curr) => {
+        acc[curr.value] = true
+        return acc
+      }, {})
+    )
   }, [])
 
   return (
