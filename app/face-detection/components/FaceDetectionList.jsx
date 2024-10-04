@@ -174,14 +174,14 @@ const CheckboxWithAction = () => {
                 </TableHead>
               )}
 
-              <TableHead className=' font-semibold'>
+              <TableHead className='font-semibold'>
                 {selectedRows.length === users.length &&
                 selectedRows.length > 0 ? (
-                  <div className=' flex gap-2'>
+                  <div className='flex'>
                     <Button
                       size='xs'
                       variant='outline'
-                      className=' text-xs '
+                      className='text-xs'
                       color='destructive'
                       onClick={() => handleDeleteUserById()}
                     >
@@ -189,11 +189,11 @@ const CheckboxWithAction = () => {
                     </Button>
                   </div>
                 ) : selectedRows.length > 0 ? (
-                  <div className=' flex gap-2'>
+                  <div className='flex'>
                     <Button
                       size='xs'
                       variant='outline'
-                      className=' text-xs '
+                      className='text-xs'
                       color='destructive'
                       onClick={() => handleDeleteUserById()}
                     >
@@ -208,6 +208,8 @@ const CheckboxWithAction = () => {
               <TableHead>Age</TableHead>
               <TableHead>Address</TableHead>
               <TableHead>Phone Number</TableHead>
+              <TableHead>Bus Name</TableHead>
+              <TableHead>Date</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -218,79 +220,41 @@ const CheckboxWithAction = () => {
                 className='hover:bg-muted'
                 data-state={selectedRows.includes(item._id) && 'selected'}
               >
-                <TableCell>
+                <TableCell className='p-2'>
+                  {' '}
+                  {/* Add padding of 2px to reduce the space */}
                   <Checkbox
                     checked={selectedRows.includes(item._id)}
                     onCheckedChange={() => handleRowSelect(item._id)}
                   />
                 </TableCell>
-                <TableCell className='font-medium  text-card-foreground/80'>
-                  <div className='flex gap-3 items-center'>
+                <TableCell className='font-medium text-card-foreground/80 p-2'>
+                  {' '}
+                  {/* Same padding */}
+                  <div className='flex'>
                     <Avatar className='rounded-full'>
                       <img
                         src={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}${item.image}`}
                         alt={item.name}
                       />
-                      {/* <AvatarFallback>AB</AvatarFallback> */}
                     </Avatar>
-                    <span className=' text-sm   text-card-foreground'>
+                    <span className='text-sm text-card-foreground'>
                       {item.name}
                     </span>
                   </div>
                 </TableCell>
-
-                {/* <TableCell>{item.title}</TableCell> */}
-                <TableCell>{item.fullName}</TableCell>
-                <TableCell>{item.email}</TableCell>
-                <TableCell>{item.gender}</TableCell>
-                <TableCell>{calculateAge(item.dob)}</TableCell>
-                <TableCell>
+                <TableCell className='p-1'>{item.fullName}</TableCell>
+                <TableCell className='p-1 email-td text-sm'>
+                  {item.email}
+                </TableCell>
+                <TableCell className='p-1 text-center'>{item.gender}</TableCell>
+                <TableCell className='p-2'>{calculateAge(item.dob)}</TableCell>
+                <TableCell className='p-2'>
                   {item.city}, {item.state}
                 </TableCell>
-                <TableCell>{item.contactNumber}</TableCell>
-                {/* <TableCell>
-              <Badge
-                variant="soft"
-                color={
-                  (item.role === "admin" && "default") ||
-                  (item.role === "member" && "success") ||
-                  (item.role === "owner" && "info") ||
-                  (item.role === "editor" && "warning")
-                }
-                className=" capitalize"
-              >
-                {item.role}
-              </Badge>
-            </TableCell> */}
-
-                {/* <TableCell className='flex justify-end'>
-                  <div className='flex gap-3'>
-                    <Button
-                      size='icon'
-                      variant='outline'
-                      color='secondary'
-                      className='h-7 w-7'
-                    >
-                      <Icon icon='heroicons:pencil' className='h-4 w-4' />
-                    </Button>
-                    <Button
-                      size='icon'
-                      variant='outline'
-                      className='h-7 w-7'
-                      color='secondary'
-                    >
-                      <Icon icon='heroicons:eye' className=' h-4 w-4' />
-                    </Button>
-                    <Button
-                      size='icon'
-                      variant='outline'
-                      className=' h-7 w-7'
-                      color='secondary'
-                    >
-                      <Icon icon='heroicons:trash' className=' h-4 w-4' />
-                    </Button>
-                  </div>
-                </TableCell> */}
+                <TableCell className='p-2'>{item.contactNumber}</TableCell>
+                <TableCell className='p-2'>{item.busName}</TableCell>
+                <TableCell className='p-2'>{item.date}</TableCell>
               </TableRow>
             ))}
           </TableBody>
