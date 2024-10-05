@@ -107,7 +107,9 @@ const CheckboxWithAction = () => {
     { label: 'City', key: 'city' },
     { label: 'State', key: 'state' },
     { label: 'Phone Number', key: 'contactNumber' },
-    { label: 'Age', key: 'age' }
+    { label: 'Bus Name', key: 'busName' },
+    { label: 'Age', key: 'age' },
+    { label: 'Date', key: 'date' }
   ]
 
   const csvData = users.map(user => ({
@@ -117,13 +119,14 @@ const CheckboxWithAction = () => {
     city: user.city,
     state: user.state,
     contactNumber: user.contactNumber,
+    busName: user.busName,
+    date: user.date,
     age: calculateAge(user.dob)
   }))
   const handleFileName = () => {
     const today = new Date()
     let year = today.getFullYear()
     const month = today.getMonth() + 1
-    console.log(month)
     const day = today.getDate()
     const name = 'Users_KYC_data_' + day + '/' + month + '/' + year + '.csv'
     setFileName(name)

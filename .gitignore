@@ -138,3 +138,5 @@ info.json
 
 #package-lock
 package-lock.json
+
+build/

@@ -7,10 +7,10 @@ const HeatMap = ({ heatMaps }) => {
         <div key={index} className='grid gap-2'>
           <Label>{heatMap.busName}</Label>
           <img width={300} height={300} src={heatMap.image} alt='heatMap' />
-          <div className='fs-6 text-gray-600'>
+          {/* <div className='fs-6 text-gray-600'>
             <span>Date: {heatMap.date}</span>
             <span>Time: {heatMap.time}</span>
-          </div>
+          </div> */}
         </div>
       ))}
     </div>
