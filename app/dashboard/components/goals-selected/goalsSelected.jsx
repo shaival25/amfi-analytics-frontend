@@ -14,6 +14,14 @@ const CricketerPreference = ({ height = 250, goalsSelected }) => {
         show: false
       }
     },
+    colors: [
+      '#FF5A5F', // bold red
+      '#00BFFF', // bright blue
+      '#7CFC00', // neon green
+      '#FF69B4', // hot pink
+      '#8A2BE2', // vivid purple
+      '#FFD700' // gold
+    ],
     labels: [],
     dataLabels: {
       enabled: true

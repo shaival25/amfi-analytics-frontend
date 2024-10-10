@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
-const CricketerPreference = ({ height = 250, mascotRank }) => {
+const CricketerPreference = ({ height = 250, mascotRank, totalCount }) => {
   const { theme: config, isRtl } = useThemeStore()
   const { theme: mode } = useTheme()
   const theme = themes.find(theme => theme.name === config)
@@ -95,7 +95,7 @@ const CricketerPreference = ({ height = 250, mascotRank }) => {
     }
   }, [mascotRank])
 
-  return (
+  return totalCount > 0 ? (
     <Chart
       options={options}
       series={series}
@@ -103,6 +103,8 @@ const CricketerPreference = ({ height = 250, mascotRank }) => {
       height={height}
       width={'100%'}
     />
+  ) : (
+    <div>No data available</div>
   )
 }
 

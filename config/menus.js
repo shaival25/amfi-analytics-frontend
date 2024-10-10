@@ -15,11 +15,12 @@ export const menusConfig = {
         permission: "analytics:read",
       },
       {
-        title: "Face Detection",
+        title: "User Details",
         icon: ScanFaceIcon,
-        href: "/face-detection",
+        href: "/user-details",
         permission: "bnyGeneral:read",
       },
+
       {
         title: "User",
         icon: User,

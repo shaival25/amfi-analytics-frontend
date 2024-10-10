@@ -10,9 +10,9 @@ import { useThemeStore } from '@/store'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
 import handleError from '@/validation/unauthorized'
-const ReportsSnapshot = ({ selectedBuses }) => {
+const ReportsSnapshot = ({ selectedBuses, range, date, selectedTimeSlots }) => {
   const router = useRouter()
-  const [range, setRange] = useState(1)
+
   const [liveCount, setLiveCount] = useState([
     {
       name: 'users count',
@@ -20,32 +20,53 @@ const ReportsSnapshot = ({ selectedBuses }) => {
     }
   ])
   const [labels, setLabels] = useState([])
-  const fetchLiveCountUsingRange = async range => {
+  const fetchLiveCountUsingRange = async (selectedTimeSlots, date) => {
     try {
+      const payload = {
+        selectedBuses
+      }
+      if (range == 'custom' && Object.keys(selectedTimeSlots).length > 0) {
+        const formattedStartDate = date.from.toLocaleDateString('en-IN')
+        const formattedEndDate = date.to.toLocaleDateString('en-IN')
+        const timeSlotsArray = Object.keys(selectedTimeSlots).filter(
+          timeSlot => selectedTimeSlots[timeSlot]
+        )
+        payload['startDate'] = formattedStartDate
+        payload['endDate'] = formattedEndDate
+        payload['selectedTimeSlots'] = timeSlotsArray.map(slot => {
+          const [start, end] = slot.split(' - ')
+          return `${start}:00`
+        })
+      }
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/live-count/${range}`,
-        { selectedBuses },
+        { ...payload },
         {
           headers: {
             'x-auth-token': Cookies.get('authToken')
           }
         }
       )
-      setLiveCount([{ data: response.data.counts }])
-      setLabels(response.data.labels)
+      if (range == 'custom') {
+        setLiveCount(response.data.counts) // Directly setting the counts (series data)
+        setLabels(response.data.labels)
+      } else {
+        setLiveCount([{ data: response.data.counts }])
+        setLabels(response.data.labels)
+      }
     } catch (error) {
       handleError(error, router)
     }
   }
   useEffect(() => {
     const interval = setInterval(() => {
-      fetchLiveCountUsingRange(range)
-    }, 10000)
+      fetchLiveCountUsingRange(selectedTimeSlots, date)
+    }, 60000)
 
-    fetchLiveCountUsingRange(range)
+    fetchLiveCountUsingRange(selectedTimeSlots, date)
 
     return () => clearInterval(interval)
-  }, [range, selectedBuses])
+  }, [range, selectedBuses, selectedTimeSlots, date])
 
   const { theme: config, setTheme: setConfig } = useThemeStore()
   const theme = themes.find(theme => theme.name === config)
@@ -71,9 +92,6 @@ const ReportsSnapshot = ({ selectedBuses }) => {
               </svg>
             </div>
           </div>
-          <div className='flex-none'>
-            <DashboardSelect range={range} setRange={setRange} />
-          </div>
         </div>
       </CardHeader>
       <CardContent className='p-1 md:p-5'>
@@ -83,6 +101,7 @@ const ReportsSnapshot = ({ selectedBuses }) => {
             series={liveCount}
             chartColor={primary}
             labels={labels}
+            range={range}
           />
         )}
         {/* <ReportsChart series={liveCount} /> */}

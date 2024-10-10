@@ -17,11 +17,19 @@ import handleError from '@/validation/unauthorized'
 import { useRouter } from 'next/navigation'
 import { MFLogo } from '@/components/svg'
 import { BeatLoader } from 'react-spinners'
+import { Calendar } from '@/components/ui/calendar'
+import DashboardSelect from './components/range-select'
 
 const DashboardPageView = () => {
+  const [selectedGeneralTimeSlots, setSelectedGeneralTimeSlots] = useState([])
+  const [dateGeneral, setDateGeneral] = useState({
+    from: new Date(),
+    to: new Date()
+  })
   const [selectedBuses, setSelectedBuses] = useState(['all'])
   const [date, setDate] = useState(new Date())
   const [selectedTimeSlots, setSelectedTimeSlots] = useState([])
+  const [range, setRange] = useState(1)
 
   const dashboardRef = useRef()
   const [showPrintLogo, setShowPrintLogo] = useState(false)
@@ -41,7 +49,7 @@ const DashboardPageView = () => {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/heat-map`,
         {
-          selectedBuses: selectedBuses,
+          selectedBuses,
           selectedDate: formattedDate,
           selectedTimeSlots: timeSlotsArray.map(slot => {
             const [start, end] = slot.split(' - ')
@@ -67,12 +75,30 @@ const DashboardPageView = () => {
     fetchHeatMaps()
   }, [selectedBuses, date, selectedTimeSlots])
 
-  const fetchFeedbackInsights = async () => {
+  const fetchFeedbackInsights = async (selectedTimeSlots, date) => {
     try {
+      const payload = {
+        selectedBuses,
+        range: range == 'custom' ? range : parseInt(range)
+      }
+      if (range == 'custom' && Object.keys(selectedTimeSlots).length > 0) {
+        const formattedStartDate = date.from.toLocaleDateString('en-CA')
+        const formattedEndDate = date.to.toLocaleDateString('en-CA')
+        const timeSlotsArray = Object.keys(selectedTimeSlots).filter(
+          timeSlot => selectedTimeSlots[timeSlot]
+        )
+        payload['startDate'] = formattedStartDate
+        payload['endDate'] = formattedEndDate
+        payload['selectedTimeSlots'] = timeSlotsArray.map(slot => {
+          const [start, end] = slot.split(' - ')
+          return `${start}:00`
+        })
+      }
+
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/feedback-insights`,
         {
-          selectedBuses
+          ...payload
         },
         {
           headers: {
@@ -89,8 +115,8 @@ const DashboardPageView = () => {
   }
 
   useEffect(() => {
-    fetchFeedbackInsights()
-  }, [selectedBuses])
+    fetchFeedbackInsights(selectedGeneralTimeSlots, dateGeneral)
+  }, [selectedBuses, range, selectedGeneralTimeSlots, dateGeneral])
 
   const fetchAllBuses = async () => {
     try {
@@ -171,6 +197,23 @@ const DashboardPageView = () => {
           <div className='text-2xl font-medium text-default-800 '>
             Analytics
           </div>
+          <DashboardSelect
+            range={range}
+            setRange={setRange}
+            date={dateGeneral}
+            setDate={setDateGeneral}
+            selectedTimeSlots={selectedGeneralTimeSlots}
+            setSelectedTimeSlots={setSelectedGeneralTimeSlots}
+          />
+
+          <Calendar
+            initialFocus
+            mode='range'
+            defaultMonth={date?.from}
+            selected={date}
+            onSelect={setDate}
+            numberOfMonths={1}
+          />
           {!showPrintLogo && (
             <Button
               onClick={displayLogo}
@@ -192,19 +235,35 @@ const DashboardPageView = () => {
         {/* reports area */}
         <div className='grid grid-cols-1  gap-2 '>
           <div className='col-span-1 lg:col-span-1'>
-            <ReportsSnapshot selectedBuses={selectedBuses} />
+            <ReportsSnapshot
+              selectedBuses={selectedBuses}
+              range={range}
+              selectedTimeSlots={selectedGeneralTimeSlots}
+              date={dateGeneral}
+            />
           </div>
         </div>
         <div className='grid grid-cols-3  gap-2 '>
-          <ReportsArea selectedBuses={selectedBuses} />
+          <ReportsArea
+            selectedBuses={selectedBuses}
+            date={dateGeneral}
+            range={range}
+            selectedTimeSlots={selectedGeneralTimeSlots}
+          />
         </div>
-        <UserInteractions selectedBuses={selectedBuses} router={router} />
         <Card>
           <CardHeader>Feedback Insights</CardHeader>
           <CardContent>
             <FeedBackInsights feedbackInsights={feedbackInsights} />
           </CardContent>
         </Card>
+        <UserInteractions
+          selectedBuses={selectedBuses}
+          router={router}
+          selectedTimeSlots={selectedGeneralTimeSlots}
+          date={dateGeneral}
+          range={range}
+        />
 
         <Card>
           <CardHeader className='border-none pb-0'>

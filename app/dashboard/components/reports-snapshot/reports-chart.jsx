@@ -10,7 +10,7 @@ import {
   getYAxisConfig
 } from '@/lib/appex-chart-options'
 
-const ReportsChart = ({ series, chartColor, height = 300, labels }) => {
+const ReportsChart = ({ series, chartColor, height = 300, labels, range }) => {
   const { theme: config, setTheme: setConfig } = useThemeStore()
   const { theme: mode } = useTheme()
 
@@ -27,22 +27,71 @@ const ReportsChart = ({ series, chartColor, height = 300, labels }) => {
     },
     stroke: {
       curve: 'smooth',
-      width: 4
+      width: range == 'custom' ? 2 : 4
     },
-    colors: [chartColor],
-    tooltip: {
-      theme: mode === 'dark' ? 'dark' : 'light'
-    },
-    grid: getGridConfig(
-      `hsl(${theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].chartGird})`
-    ),
+    colors:
+      range == 'custom'
+        ? [
+            '#795548',
+            '#607D8B',
+            '#03A9F4',
+            '#66BB6A',
+            '#FFEB3B',
+            '#4DB6AC',
+            '#E040FB',
+            '#8BC34A',
+            '#8B9467',
+            '#2196F3',
+            '#FF9800',
+            '#FFC107',
+            '#F57C00',
+            '#64B5F6',
+            '#C2185B',
+            '#9C27B0',
+            '#9CCC65',
+            '#E5E5EA',
+            '#009688',
+            '#FF5252',
+            '#448AFF',
+            '#FFC400',
+            '#03A9F4',
+            '#C0E188',
+            '#9FA8DA',
+            '#F8E231',
+            '#1E88E5',
+            '#00E676',
+            '#D4E157',
+            '#EC407A',
+            '#4CAF50',
+            '#42A5F5',
+            '#66BB6A',
+            '#FFEB3B',
+            '#4DB6AC',
+            '#E040FB',
+            '#8B9467',
+            '#2196F3',
+            '#F57C00',
+            '#64B5F6',
+            '#C2185B',
+            '#9CCC65',
+            '#E5E5EA',
+            '#FF5252',
+            '#448AFF',
+            '#FFC400',
+            '#E91E63',
+            '#9E9E9E',
+            '#C0E188',
+            '#9FA8DA',
+            '#F8E231'
+          ]
+        : [chartColor],
+
     fill: {
       type: 'gradient',
-      colors: chartColor,
       gradient: {
-        shadeIntensity: 0.1,
-        opacityFrom: 0.4,
-        opacityTo: 0.1,
+        shadeIntensity: 1,
+        opacityFrom: 0.7,
+        opacityTo: 0.9,
         stops: [50, 100, 0]
       }
     },
@@ -62,13 +111,17 @@ const ReportsChart = ({ series, chartColor, height = 300, labels }) => {
   }
 
   return (
-    <Chart
-      options={options}
-      series={series}
-      type='area'
-      height={height}
-      width={'100%'}
-    />
+    <>
+      {series && series.length > 0 && labels && labels.length > 0 ? (
+        <Chart
+          options={options}
+          series={series}
+          type={range == 'custom' ? 'line' : 'area'}
+          height={height}
+          width={'100%'}
+        />
+      ) : null}
+    </>
   )
 }
 

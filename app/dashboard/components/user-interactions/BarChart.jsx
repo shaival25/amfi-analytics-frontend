@@ -10,30 +10,36 @@ import {
   Legend
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const BasicBar = ({ height = 350, barData }) => {
+  // Check if barData exists and has series data
+  if (!barData || !barData.series || barData.series.length === 0) {
+    return <div>No data available</div> // You can customize this message
+  }
+
+  const seriesData = barData.series[0] // Get the first series object
+
+  // Now we can safely access properties of seriesData
   const data = {
-    labels: barData?.labels,
-    datasets: barData.datasets
-      ? barData.datasets.map((barData, index) => {
-          const colors = ['#FFC107', '#4CAF50', '#2196F3', '#9C27B0']
-          return {
-            ...barData, // Spread existing properties
-            fill: false,
-            backgroundColor: colors[index % colors.length],
-            borderColor: colors[index % colors.length],
-            borderWidth: 2,
-            borderSkipped: 'bottom',
-            barThickness: 25
-          }
-        })
-      : []
+    // Set the x-axis labels to the bus names from the series data
+    labels: seriesData.data.map(item => item.x), // Use seriesData.data to get the x values
+
+    datasets: [
+      {
+        label: seriesData.name || 'Avg Duration', // Use the series name
+        data: seriesData.data.map(item => item.y), // Map y values from series data
+        backgroundColor: '#4CAF50', // Set a single color for all bars
+        borderColor: '#4CAF50',
+        borderWidth: 2,
+        barThickness: 25
+      }
+    ]
   }
 
   const options = {
     responsive: true,
-
     scales: {
       y: {
         grid: {
@@ -48,7 +54,6 @@ const BasicBar = ({ height = 350, barData }) => {
         }
       }
     },
-
     maintainAspectRatio: false
   }
 

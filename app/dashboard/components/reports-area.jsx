@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import handleError from '@/validation/unauthorized'
 import CricketerPreference from './cricketer-reports/cricketerPreference'
 import GoalsSelected from './goals-selected/goalsSelected'
-const ReportsArea = ({ selectedBuses }) => {
+const ReportsArea = ({ selectedBuses, range, date, selectedTimeSlots }) => {
   const [fullCount, setFullCount] = useState(0)
   const [mascotRank, setMascotRank] = useState({})
   const [totalCricketerCount, setTotalCricketerCount] = useState(0)
@@ -17,11 +17,25 @@ const ReportsArea = ({ selectedBuses }) => {
   const [feedbackCounter, setFeedbackCounter] = useState(0)
   const [goalsSelected, setGoalsSelected] = useState({})
   const router = useRouter()
-  const fetchFullCount = async () => {
+  const fetchFullCount = async (timeSlotsArray, startDate, endDate) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/full-count`,
-        { selectedBuses },
+        range == 'custom'
+          ? {
+              startDate: startDate,
+              endDate: endDate,
+              range,
+              selectedBuses,
+              selectedTimeSlots: timeSlotsArray.map(slot => {
+                const [start, end] = slot.split(' - ')
+                return `${start}:00`
+              })
+            }
+          : {
+              selectedBuses,
+              range: range == 'all' ? range : parseInt(range)
+            },
         {
           headers: {
             'x-auth-token': Cookies.get('authToken')
@@ -34,11 +48,25 @@ const ReportsArea = ({ selectedBuses }) => {
       handleError(error, router)
     }
   }
-  const fetchMascotRank = async () => {
+  const fetchMascotRank = async (timeSlotsArray, startDate, endDate) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/mascot-count`,
-        { selectedBuses },
+        range == 'custom'
+          ? {
+              startDate: startDate,
+              endDate: endDate,
+              range,
+              selectedBuses,
+              selectedTimeSlots: timeSlotsArray.map(slot => {
+                const [start, end] = slot.split(' - ')
+                return `${start}:00`
+              })
+            }
+          : {
+              selectedBuses,
+              range: range == 'all' ? range : parseInt(range)
+            },
         {
           headers: {
             'x-auth-token': Cookies.get('authToken')
@@ -57,11 +85,25 @@ const ReportsArea = ({ selectedBuses }) => {
     }
   }
 
-  const fetchPersonCounter = async () => {
+  const fetchPersonCounter = async (timeSlotsArray, startDate, endDate) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/person-count`,
-        { selectedBuses },
+        range == 'custom'
+          ? {
+              startDate: startDate,
+              endDate: endDate,
+              range,
+              selectedBuses,
+              selectedTimeSlots: timeSlotsArray.map(slot => {
+                const [start, end] = slot.split(' - ')
+                return `${start}:00`
+              })
+            }
+          : {
+              selectedBuses,
+              range: range == 'all' ? range : parseInt(range)
+            },
         {
           headers: {
             'x-auth-token': Cookies.get('authToken')
@@ -75,11 +117,25 @@ const ReportsArea = ({ selectedBuses }) => {
     }
   }
 
-  const fetchFeedBackCount = async () => {
+  const fetchFeedBackCount = async (timeSlotsArray, startDate, endDate) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/feedback-count`,
-        { selectedBuses },
+        range == 'custom'
+          ? {
+              startDate: startDate,
+              endDate: endDate,
+              range,
+              selectedBuses,
+              selectedTimeSlots: timeSlotsArray.map(slot => {
+                const [start, end] = slot.split(' - ')
+                return `${start}:00`
+              })
+            }
+          : {
+              selectedBuses,
+              range: range == 'all' ? range : parseInt(range)
+            },
         {
           headers: {
             'x-auth-token': Cookies.get('authToken')
@@ -93,11 +149,25 @@ const ReportsArea = ({ selectedBuses }) => {
       handleError(error, router)
     }
   }
-  const fetchGoalsSelected = async () => {
+  const fetchGoalsSelected = async (timeSlotsArray, startDate, endDate) => {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/goals-selected`,
-        { selectedBuses },
+        range == 'custom'
+          ? {
+              startDate: startDate,
+              endDate: endDate,
+              range,
+              selectedBuses,
+              selectedTimeSlots: timeSlotsArray.map(slot => {
+                const [start, end] = slot.split(' - ')
+                return `${start}:00`
+              })
+            }
+          : {
+              selectedBuses,
+              range: range == 'all' ? range : parseInt(range)
+            },
         {
           headers: {
             'x-auth-token': Cookies.get('authToken')
@@ -112,23 +182,34 @@ const ReportsArea = ({ selectedBuses }) => {
     }
   }
 
-  useEffect(() => {
-    fetchFullCount()
-    fetchMascotRank()
-    fetchPersonCounter()
-    fetchFeedBackCount()
-    fetchGoalsSelected()
-
-    const interval = setInterval(() => {
+  const fetchAllData = async () => {
+    if (range == 'custom' && Object.keys(selectedTimeSlots).length > 0) {
+      const formattedStartDate = date.from.toLocaleDateString('en-CA')
+      const formattedEndDate = date.to.toLocaleDateString('en-CA')
+      const timeSlotsArray = Object.keys(selectedTimeSlots).filter(
+        timeSlot => selectedTimeSlots[timeSlot]
+      )
+      fetchFullCount(timeSlotsArray, formattedStartDate, formattedEndDate)
+      fetchMascotRank(timeSlotsArray, formattedStartDate, formattedEndDate)
+      fetchPersonCounter(timeSlotsArray, formattedStartDate, formattedEndDate)
+      fetchFeedBackCount(timeSlotsArray, formattedStartDate, formattedEndDate)
+      fetchGoalsSelected(timeSlotsArray, formattedStartDate, formattedEndDate)
+    } else {
       fetchFullCount()
       fetchMascotRank()
       fetchPersonCounter()
       fetchFeedBackCount()
       fetchGoalsSelected()
-    }, 10000)
+    }
+  }
 
+  useEffect(() => {
+    fetchAllData()
+    const interval = setInterval(() => {
+      fetchAllData()
+    }, 60000)
     return () => clearInterval(interval)
-  }, [selectedBuses])
+  }, [selectedBuses, range, date, selectedTimeSlots])
   return (
     <>
       <Card className='mb-4'>
@@ -203,7 +284,10 @@ const ReportsArea = ({ selectedBuses }) => {
           </span>
         </CardHeader>
         <CardContent className='px-4'>
-          <CricketerPreference mascotRank={mascotRank} />
+          <CricketerPreference
+            mascotRank={mascotRank}
+            totalCount={totalCricketerCount}
+          />
         </CardContent>
       </Card>
       <Card className='mb-4'>

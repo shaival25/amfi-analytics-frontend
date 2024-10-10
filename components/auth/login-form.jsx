@@ -68,7 +68,7 @@ const LogInForm = () => {
         setIsPending(false)
         if (permissions.includes('analytics:read')) router.push('/dashboard')
         else if (permissions.includes('bnyGeneral:read'))
-          router.push('/face-detection')
+          router.push('/user-details')
         else if (permissions.includes('users:read')) router.push('/users')
         else router.push('/error-page/401')
       }

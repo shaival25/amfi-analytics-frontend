@@ -1,4 +1,8 @@
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
@@ -7,15 +11,35 @@ import { DayPicker } from 'react-day-picker'
 
 import { buttonVariants } from '@/components/ui/button'
 
-const HeatMapDatePicker = ({ date, setDate }) => {
+const HeatMapDatePicker = ({ date, setDate, mode = 'single' }) => {
+  const formatRange = dateRange => {
+    return dateRange && dateRange.from
+      ? `${format(dateRange.from, 'dd/MM/yy')} - ${format(
+          dateRange.to,
+          'dd/MM/yy'
+        )}`
+      : 'Select a range'
+  }
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
           variant='outline'
-          className={cn('w-[240px] ltr:pl-3 text-left')}
+          className={cn(
+            'w-[240px] ltr:pl-3 text-left overflow-hidden text-ellipsis'
+          )}
         >
-          {date ? format(date, 'PPP') : <span>Pick a date</span>}
+          {mode === 'single' ? (
+            <>{date ? format(date, 'PPP') : <span>Pick a date</span>}</>
+          ) : (
+            <>
+              {date?.from && date?.to ? (
+                formatRange(date)
+              ) : (
+                <span>Select a range</span>
+              )}
+            </>
+          )}
           <CalendarIcon className='ltr:ml-auto  h-4 w-4' />
         </Button>
       </PopoverTrigger>
@@ -23,7 +47,7 @@ const HeatMapDatePicker = ({ date, setDate }) => {
         <DayPicker
           selected={date}
           onSelect={setDate}
-          mode='single'
+          mode={mode}
           initialFocus
           className={cn('p-0 md:p-3')}
           classNames={{
