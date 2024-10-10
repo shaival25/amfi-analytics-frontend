@@ -6,12 +6,12 @@
   "/roles/page": "app/roles/page.js",
   "/user-details/page": "app/user-details/page.js",
   "/users/page": "app/users/page.js",
-  "/auth/(login)/login/page": "app/auth/(login)/login/page.js",
-  "/error-page/401/page": "app/error-page/401/page.js",
-  "/error-page/404/page": "app/error-page/404/page.js",
   "/error-page/403/page": "app/error-page/403/page.js",
+  "/error-page/404/page": "app/error-page/404/page.js",
   "/error-page/429/page": "app/error-page/429/page.js",
-  "/error-page/419/page": "app/error-page/419/page.js",
   "/error-page/500/page": "app/error-page/500/page.js",
-  "/error-page/503/page": "app/error-page/503/page.js"
+  "/error-page/401/page": "app/error-page/401/page.js",
+  "/error-page/503/page": "app/error-page/503/page.js",
+  "/error-page/419/page": "app/error-page/419/page.js",
+  "/auth/(login)/login/page": "app/auth/(login)/login/page.js"
 }
