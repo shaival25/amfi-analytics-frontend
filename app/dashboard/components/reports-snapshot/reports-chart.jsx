@@ -32,7 +32,6 @@ const ReportsChart = ({ series, chartColor, height = 300, labels, range }) => {
     colors:
       range == 'custom'
         ? [
-            '#795548',
             '#607D8B',
             '#03A9F4',
             '#66BB6A',
@@ -42,14 +41,15 @@ const ReportsChart = ({ series, chartColor, height = 300, labels, range }) => {
             '#8BC34A',
             '#8B9467',
             '#2196F3',
-            '#FF9800',
-            '#FFC107',
             '#F57C00',
+            '#795548',
+
             '#64B5F6',
             '#C2185B',
             '#9C27B0',
             '#9CCC65',
             '#E5E5EA',
+            '#FF9800',
             '#009688',
             '#FF5252',
             '#448AFF',
@@ -69,6 +69,7 @@ const ReportsChart = ({ series, chartColor, height = 300, labels, range }) => {
             '#4DB6AC',
             '#E040FB',
             '#8B9467',
+            '#FFC107',
             '#2196F3',
             '#F57C00',
             '#64B5F6',
@@ -87,21 +88,16 @@ const ReportsChart = ({ series, chartColor, height = 300, labels, range }) => {
         : [chartColor],
 
     fill: {
-      type: 'gradient',
+      type: range == 'custom' ? 'solid' : 'gradient',
       gradient: {
         shadeIntensity: 1,
-        opacityFrom: 0.7,
-        opacityTo: 0.9,
+        opacityFrom: 1,
+        opacityTo: 1,
         stops: [50, 100, 0]
       }
     },
-    yaxis: getYAxisConfig(
-      `hsl(${theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].chartLabel})`
-    ),
-    xaxis: getXAxisConfig(
-      `hsl(${theme?.cssVars[mode === 'dark' ? 'dark' : 'light'].chartLabel})`,
-      labels
-    ),
+    yaxis: getYAxisConfig(`hsl(${theme?.cssVars['light'].chartLabel})`),
+    xaxis: getXAxisConfig(`hsl(${theme?.cssVars['light'].chartLabel})`, labels),
     padding: {
       top: 0,
       right: 0,
