@@ -42,7 +42,7 @@ const DashboardSelect = ({
             setShowTimeSlot(false)
           }
         }}
-        defaultValue='1'
+        defaultValue='all'
       >
         <SelectTrigger className='w-[150px]'>
           <SelectValue

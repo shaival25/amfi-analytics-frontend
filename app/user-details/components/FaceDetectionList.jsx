@@ -19,6 +19,7 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination'
+import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Avatar } from '@/components/ui/avatar'
 import axios from 'axios'
@@ -34,6 +35,7 @@ const CheckboxWithAction = () => {
   const [loading, setLoading] = useState(false)
   const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
+  const [search, setSearch] = useState('')
   const router = useRouter()
 
   const handleSelectAll = () => {
@@ -100,12 +102,16 @@ const CheckboxWithAction = () => {
 
   const handlePageChange = page => {
     setCurrentPage(page)
-    fetchFaceDetectionDetails(page)
+    if (search) {
+      handleSearch(search, page)
+    } else {
+      fetchFaceDetectionDetails(page)
+    }
   }
 
   useEffect(() => {
-    fetchFaceDetectionDetails(currentPage)
-  }, [currentPage])
+    fetchFaceDetectionDetails()
+  }, [])
 
   // Calculate age from date of birth
   const calculateAge = dob => {
@@ -168,9 +174,7 @@ const CheckboxWithAction = () => {
     if (startPage > 1) {
       pages.push(
         <PaginationItem key='first'>
-          <PaginationLink href='#' onClick={() => handlePageChange(1)}>
-            1
-          </PaginationLink>
+          <PaginationLink onClick={() => handlePageChange(1)}>1</PaginationLink>
         </PaginationItem>
       )
       if (startPage > 2) {
@@ -183,7 +187,6 @@ const CheckboxWithAction = () => {
       pages.push(
         <PaginationItem key={page}>
           <PaginationLink
-            href='#'
             isActive={currentPage === page}
             onClick={() => handlePageChange(page)}
           >
@@ -200,7 +203,7 @@ const CheckboxWithAction = () => {
       }
       pages.push(
         <PaginationItem key='last'>
-          <PaginationLink href='#' onClick={() => handlePageChange(totalPages)}>
+          <PaginationLink onClick={() => handlePageChange(totalPages)}>
             {totalPages}
           </PaginationLink>
         </PaginationItem>
@@ -208,6 +211,36 @@ const CheckboxWithAction = () => {
     }
 
     return pages
+  }
+
+  const handleSearch = async (search, page = 1) => {
+    try {
+      if (search === '') {
+        setCurrentPage(1)
+        fetchFaceDetectionDetails()
+        return
+      }
+      const response = await axios.post(
+        `${
+          process.env.NEXT_PUBLIC_BACKEND_BASE_URL
+        }/api/bnyGeneral/search?page=${page}&limit=${20}`,
+        {
+          searchText: search
+        },
+        {
+          headers: {
+            'x-auth-token': Cookies.get('authToken')
+          }
+        }
+      )
+      if (response.status === 200) {
+        setLoading(false)
+        setUsers(response.data.data) // Assuming the API sends `users` array
+        setTotalPages(response.data.totalPages) // Assuming total pages are calculated in the backend
+      }
+    } catch (error) {
+      handleError(error, router)
+    }
   }
 
   return (
@@ -233,6 +266,15 @@ const CheckboxWithAction = () => {
           </div>
           {users && (
             <>
+              <Input
+                type='text'
+                placeholder='Search'
+                onChange={e => {
+                  setSearch(e.target.value)
+                  handleSearch(e.target.value)
+                }}
+                value={search}
+              />
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -250,35 +292,40 @@ const CheckboxWithAction = () => {
                         />
                       </TableHead>
                     )}
-
-                    <TableHead className='font-semibold'>
-                      {selectedRows.length === users.length &&
-                      selectedRows.length > 0 ? (
-                        <div className='flex'>
-                          <Button
-                            size='xs'
-                            variant='outline'
-                            className='text-xs'
-                            color='destructive'
-                            onClick={() => handleDeleteUserById()}
-                          >
-                            Delete all
-                          </Button>
-                        </div>
-                      ) : selectedRows.length > 0 ? (
-                        <div className='flex'>
-                          <Button
-                            size='xs'
-                            variant='outline'
-                            className='text-xs'
-                            color='destructive'
-                            onClick={() => handleDeleteUserById()}
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      ) : null}
-                    </TableHead>
+                    {localStorage
+                      .getItem('userPermissions')
+                      .includes('bnyGeneral:delete') ? (
+                      <TableHead className='font-semibold'>
+                        {selectedRows.length === users.length &&
+                        selectedRows.length > 0 ? (
+                          <div className='flex'>
+                            <Button
+                              size='xs'
+                              variant='outline'
+                              className='text-xs'
+                              color='destructive'
+                              onClick={() => handleDeleteUserById()}
+                            >
+                              Delete all
+                            </Button>
+                          </div>
+                        ) : selectedRows.length > 0 ? (
+                          <div className='flex'>
+                            <Button
+                              size='xs'
+                              variant='outline'
+                              className='text-xs'
+                              color='destructive'
+                              onClick={() => handleDeleteUserById()}
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        ) : null}
+                      </TableHead>
+                    ) : (
+                      <TableHead />
+                    )}
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Gender</TableHead>
@@ -297,14 +344,18 @@ const CheckboxWithAction = () => {
                       className='hover:bg-muted'
                       data-state={selectedRows.includes(item._id) && 'selected'}
                     >
-                      <TableCell className='p-2'>
-                        {' '}
-                        {/* Add padding of 2px to reduce the space */}
-                        <Checkbox
-                          checked={selectedRows.includes(item._id)}
-                          onCheckedChange={() => handleRowSelect(item._id)}
-                        />
-                      </TableCell>
+                      {localStorage
+                        .getItem('userPermissions')
+                        .includes('bnyGeneral:delete') && (
+                        <TableCell className='p-2'>
+                          {' '}
+                          {/* Add padding of 2px to reduce the space */}
+                          <Checkbox
+                            checked={selectedRows.includes(item._id)}
+                            onCheckedChange={() => handleRowSelect(item._id)}
+                          />
+                        </TableCell>
+                      )}
                       <TableCell className='font-medium text-card-foreground/80 p-2'>
                         {' '}
                         {/* Same padding */}
@@ -332,23 +383,26 @@ const CheckboxWithAction = () => {
               </Table>
 
               {/* Pagination */}
-              <Pagination className='pb-4'>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                    />
-                  </PaginationItem>
-                  {renderPaginationItems()}
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
+
+              {totalPages > 1 && (
+                <Pagination className='pb-4'>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                      />
+                    </PaginationItem>
+                    {renderPaginationItems()}
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              )}
             </>
           )}
         </>

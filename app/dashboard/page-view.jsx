@@ -29,7 +29,7 @@ const DashboardPageView = () => {
   const [selectedBuses, setSelectedBuses] = useState(['all'])
   const [date, setDate] = useState(new Date())
   const [selectedTimeSlots, setSelectedTimeSlots] = useState([])
-  const [range, setRange] = useState(1)
+  const [range, setRange] = useState('all')
 
   const dashboardRef = useRef()
   const [showPrintLogo, setShowPrintLogo] = useState(false)

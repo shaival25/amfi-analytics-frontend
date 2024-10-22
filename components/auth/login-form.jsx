@@ -111,9 +111,7 @@ const LogInForm = () => {
   }, [])
   return (
     <div className='w-full py-10'>
-      <Link href='/dashboard' className='inline-block'>
-        <MFLogo className='text-primary' width='400px' height='50px' />
-      </Link>
+      <MFLogo className='text-primary' width='400px' height='50px' />
       <div className='xl:mt-8 mt-6 xl:text-xl text-xl font-bold text-default-900'></div>
       {/* <div className="2xl:text-lg text-base text-default-600 2xl:mt-2 leading-6">
         Enter the information you entered while registering.
