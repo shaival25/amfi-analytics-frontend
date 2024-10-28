@@ -9,9 +9,12 @@ import { useRouter } from 'next/navigation'
 import handleError from '@/validation/unauthorized'
 import CricketerPreference from './cricketer-reports/cricketerPreference'
 import GoalsSelected from './goals-selected/goalsSelected'
+import OnlineOffline from './online-offline/onlineOffline'
+
 const ReportsArea = ({ selectedBuses, range, date, selectedTimeSlots }) => {
   const [fullCount, setFullCount] = useState(0)
   const [mascotRank, setMascotRank] = useState({})
+  const [onlineOffline, setOnlineOffline] = useState({})
   const [totalCricketerCount, setTotalCricketerCount] = useState(0)
   const [personCounter, setPersonCounter] = useState(0)
   const [feedbackCounter, setFeedbackCounter] = useState(0)
@@ -85,6 +88,38 @@ const ReportsArea = ({ selectedBuses, range, date, selectedTimeSlots }) => {
     }
   }
 
+  const fetchOnlineOffline = async (timeSlotsArray, startDate, endDate) => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/analytics/online-offline`,
+        range == 'custom'
+          ? {
+              startDate: startDate,
+              endDate: endDate,
+              range,
+              selectedBuses,
+              selectedTimeSlots: timeSlotsArray.map(slot => {
+                const [start, end] = slot.split(' - ')
+                return `${start}:00`
+              })
+            }
+          : {
+              selectedBuses,
+              range: range == 'all' ? range : parseInt(range)
+            },
+        {
+          headers: {
+            'x-auth-token': Cookies.get('authToken')
+          }
+        }
+      )
+      if (response.status === 200) {
+        setOnlineOffline(response.data)
+      }
+    } catch (error) {
+      handleError(error, router)
+    }
+  }
   const fetchPersonCounter = async (timeSlotsArray, startDate, endDate) => {
     try {
       const response = await axios.post(
@@ -194,12 +229,14 @@ const ReportsArea = ({ selectedBuses, range, date, selectedTimeSlots }) => {
       fetchPersonCounter(timeSlotsArray, formattedStartDate, formattedEndDate)
       fetchFeedBackCount(timeSlotsArray, formattedStartDate, formattedEndDate)
       fetchGoalsSelected(timeSlotsArray, formattedStartDate, formattedEndDate)
+      fetchOnlineOffline(timeSlotsArray, formattedStartDate, formattedEndDate)
     } else {
       fetchFullCount()
       fetchMascotRank()
       fetchPersonCounter()
       fetchFeedBackCount()
       fetchGoalsSelected()
+      fetchOnlineOffline()
     }
   }
 
@@ -226,8 +263,23 @@ const ReportsArea = ({ selectedBuses, range, date, selectedTimeSlots }) => {
           </span>
         </CardHeader>
         <CardContent className='pb-4 px-4'>
-          <div className='text-2xl font-semibold text-default-900 mb-2.5'>
-            {fullCount}
+          <div className='text-2xl font-semibold text-default-900 mb-2.5 text-lg'>
+            <div className='grid grid-cols-3 mb-2'>
+              <div className='grid gap-2 grid-cols-1'>
+                <div className='text-black'>Online</div>
+                <div>{onlineOffline?.count?.Online}</div>
+              </div>
+
+              <div className='grid gap-2 grid-cols-1'>
+                <div className='text-black'>Offline</div>
+                <div>{onlineOffline?.count?.Offline}</div>
+              </div>
+              <div className='grid gap-2 grid-cols-1'>
+                <div className='text-black'>Total</div>
+                <div>{onlineOffline?.total}</div>
+              </div>
+            </div>
+            <div className='grid grid-cols-3 gap-3'></div>
           </div>
         </CardContent>
       </Card>
@@ -268,6 +320,26 @@ const ReportsArea = ({ selectedBuses, range, date, selectedTimeSlots }) => {
           <div className='text-2xl font-semibold text-default-900 mb-2.5'>
             {feedbackCounter}
           </div>
+        </CardContent>
+      </Card>
+      <Card className='mb-4'>
+        <CardHeader className='flex-col-reverse sm:flex-row flex-wrap gap-2 border-none mb-0 pb-0'>
+          <span className='text-sm font-medium text-default-800 flex-1'>
+            Online V/S Offline
+          </span>
+          <span
+            className={cn(
+              'flex-none h-9 w-9 flex justify-center items-center bg-default-100 rounded-full'
+            )}
+          >
+            <Session className='h-4 w-4' />
+          </span>
+        </CardHeader>
+        <CardContent className='px-4'>
+          <OnlineOffline
+            counts={onlineOffline.count}
+            totalCount={onlineOffline.total}
+          />
         </CardContent>
       </Card>
       <Card className='mb-4'>
